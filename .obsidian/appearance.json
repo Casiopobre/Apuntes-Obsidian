@@ -1,3 +1,7 @@
 {
-  "cssTheme": "Catppuccin"
+  "cssTheme": "Catppuccin",
+  "textFontFamily": "Liberation Serif",
+  "enabledCssSnippets": [
+    "Image_Align"
+  ]
 }

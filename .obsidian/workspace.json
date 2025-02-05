@@ -4,20 +4,39 @@
     "type": "split",
     "children": [
       {
-        "id": "15175daf9dd9fd30",
+        "id": "086dabf051a55d29",
         "type": "tabs",
         "children": [
           {
-            "id": "604b1937651784c6",
+            "id": "d6530fc0156894c3",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {},
+              "type": "markdown",
+              "state": {
+                "file": "CoGa/Introducción.md",
+                "mode": "source",
+                "source": false
+              },
               "icon": "lucide-file",
-              "title": "New tab"
+              "title": "Introducción"
+            }
+          },
+          {
+            "id": "54a2530f35413960",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "CoGa/OpenGL.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "OpenGL"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -74,7 +93,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300
+    "width": 200,
+    "collapsed": true
   },
   "right": {
     "id": "7d25637a7703bb37",
@@ -143,12 +163,23 @@
               "icon": "lucide-list",
               "title": "Outline"
             }
+          },
+          {
+            "id": "2dbbd778d9bb6ba4",
+            "type": "leaf",
+            "state": {
+              "type": "git-view",
+              "state": {},
+              "icon": "git-pull-request",
+              "title": "Source Control"
+            }
           }
-        ]
+        ],
+        "currentTab": 4
       }
     ],
     "direction": "horizontal",
-    "width": 300,
+    "width": 200,
     "collapsed": true
   },
   "left-ribbon": {
@@ -162,8 +193,19 @@
       "obsidian-git:Open Git source control": false
     }
   },
-  "active": "16330645b5485dd9",
+  "active": "54a2530f35413960",
   "lastOpenFiles": [
+    "CoGa/Imaxes/DobreBuffer.png",
+    "CoGa/Imaxes/CamaraSintetica.png",
+    "CoGa/Imaxes/EsquemaOperacionsFixas.png",
+    "CoGa/OpenGL.md",
+    "CoGa/Introducción.md",
+    "DeSoft/Tema1.md",
+    "SOII/Tema5.md",
+    "DeSoft/Imaxes/DiagramaExemplo.png",
+    "DeSoft/Imaxes",
+    "ArCo/Tema 1.md",
+    "BDII/Tema1.md",
     "Apuntes-Obsidian",
     "BDII",
     "SOII",
