@@ -4,39 +4,24 @@
     "type": "split",
     "children": [
       {
-        "id": "086dabf051a55d29",
+        "id": "a9953972890cc021",
         "type": "tabs",
         "children": [
           {
-            "id": "d6530fc0156894c3",
+            "id": "f65d1331230273b8",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "CoGa/Introducción.md",
+                "file": "ArCo/Tema 1.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Introducción"
-            }
-          },
-          {
-            "id": "54a2530f35413960",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "CoGa/OpenGL.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "OpenGL"
+              "title": "Tema 1"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "vertical"
@@ -93,8 +78,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 200,
-    "collapsed": true
+    "width": 200
   },
   "right": {
     "id": "7d25637a7703bb37",
@@ -193,18 +177,21 @@
       "obsidian-git:Open Git source control": false
     }
   },
-  "active": "54a2530f35413960",
+  "active": "f65d1331230273b8",
   "lastOpenFiles": [
+    "CoGa/Introducción.md",
+    "ArCo/Introdución.md",
+    "CoGa/Introduccion.md",
+    "DeSoft/Tema1.md",
+    "ArCo/Tema 1.md",
+    "ArCo",
+    "CoGa/OpenGL.md",
     "CoGa/Imaxes/DobreBuffer.png",
     "CoGa/Imaxes/CamaraSintetica.png",
     "CoGa/Imaxes/EsquemaOperacionsFixas.png",
-    "CoGa/OpenGL.md",
-    "CoGa/Introducción.md",
-    "DeSoft/Tema1.md",
     "SOII/Tema5.md",
     "DeSoft/Imaxes/DiagramaExemplo.png",
     "DeSoft/Imaxes",
-    "ArCo/Tema 1.md",
     "BDII/Tema1.md",
     "Apuntes-Obsidian",
     "BDII",
