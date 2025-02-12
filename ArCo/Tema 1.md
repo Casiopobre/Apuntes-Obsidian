@@ -24,32 +24,68 @@
 
 ## Arquitectura dun computador
 \*ISA: arquitectura do conxunto de instruccións
-Realmente, no diseño dun computador se teñen en conta máis cousas ademáis da ISA (o espazo, o consumo, o rendemento...)
+Realmente, _no diseño dun computador se teñen en conta máis cousas ademáis da ISA_ (o espazo, o consumo, o rendemento...)
 
 ## Tipos de pararelismo
-O paralelismo pódese explotar a diferentes niveis. Por exemplo: _OpenMP_, que permite explotar o sistema multicore (lanzar unha tarefa a cada un dos procesadores) --> **Paralelismo a nivel de thread**
-Tamén temos explotación do **paralelismo a nivel de instrucción**: varias instrucción executándose á vez en distintos cores.
-\*_Arquitectura vectorial_: as instruccións vectoriais son as que executan as GPUs (operan con vectores, é decir, unha única instrucción operando moitos datos á vez: simple instrucción, múltiple dato (SIMD))
+O paralelismo pódese explotar a diferentes niveis. Por exemplo: _OpenMP_, que permite explotar o sistema multicore (lanzar unha tarefa a cada un dos procesadores) --> **Paralelismo a nivel de thread (TLP)**
+Tamén temos explotación do **paralelismo a nivel de instrucción (ILP)**: varias instrucción executándose á vez en distintos cores (chegou á máxima explotabilidade).
+\*_Arquitectura vectorial_: as instruccións vectoriais son as que se executan nas GPUs (operan con vectores, é decir, unha única instrucción operando moitos datos á vez: simple instrucción, múltiple dato (SIMD))
 
 ## Clasificación das arquitecturas paralelas
 ### Taxonomía de Flynn
-Baséase en streams de datos e instruccións:
-+ Instrucción simple, fluxo de datos simple (SISD):
+Clasifica as arquitecturas paralelas baseándose en **streams de datos e instruccións**:
++ **Instrucción simple, fluxo de datos simple (SISD)**:
 	+ Computadores secuenciais (como o pentium 4)
-+ Instrucción simple, fluxo de datos múltiple (SIMD):
-+ Múltiples instruccións, fluxo de datos simple (MISD):
-+ Múltiples instruccións, fluxo de datos múltiples (MIMD):
++ **Instrucción simple, fluxo de datos múltiple (SIMD)**:
+	+ Arquitecturas vectoriais: GPUs
++ **Múltiples instruccións, fluxo de datos simple (MISD)**:
++ **Múltiples instruccións, fluxo de datos múltiples (MIMD)**:
 	+ Clústers
+\* Moitos computadores son _híbridos de diferenctes tipos_
 
-### Arquitecturas MIMD
-+ Procesadores de memoria compartida
-+ Multiprocesadores de memoria distribuída: cada procesador ten a súa propia memoria RAM independente, e estas memorias RAM están interconectadas, polo que o tempo de acceso a un dato depende de onde estea (desde o procesador P0 podo acceder á memoria do procesador P2, pero tardarei máis). Por esto denomínase Non-Uniform Memory Access (NUMA)
-	+ Multicores: todos os cores comparten a memoria (o espazo de direccións) (UMA)
-		+ Teñen máis dun procesador por chip
-		+ Requiren programación paralela explícita para aproveitalos
+### Arquitecturas MIMD/multiprocesadores
++ **Procesadores de memoria compartida (UMA = Unifrom Acces Memory)**:
+	+ Todos os procesadores comparten un _único espazo de direccións_ ("memoria compartida")
+	+ O programador _non necsita coñecer a ubicación dos datos_
++ **Multiprocesadores de memoria distribuída (NUMA = Non-Uniform Memory Access)**: 
+	+ _Cada procesador ten a súa propia memoria RAM independente_ (o seu propio espazo de direccións), e estas memorias RAM están _interconectadas_, polo que _o tempo de acceso a un dato depende da súa localización (onde se atopa)_ (dende o procesador P0 podo acceder á memoria do procesador P2, pero tardarei máis). \*Por esto denomínase Non-Uniform Memory Access (NUMA) ![[MultiprocesadoresNUMA.png|center| 230]]
+	+ **Multicores**: 
+		+ _Todos os cores comparten a memoria_ (o espazo de direccións) (UMA)
+		+ Teñen _máis dun procesador por chip_
+		+ Requiren _programación paralela explícita_ para aproveitalos
 		+ É complicado conseguir un bo rendemento, dividir o traballo entre os núcleos e optimizar a comunicación entre eles
-
 \* Chegamos a un teito tecnolóxico no que respecta ao rendemento das CPUs
+>[! Caso] Caso do Pentium4:
+Tiña _hiperthreading_: cun único núcleo, comportábase como se tivese 2 (ía cambiando dunha tarefa á outra todo o rato ("pseudoparalelismo"))
 
-Caso do Pentium4:
-Tiña hiperthreading: cun único núcleo, comportábase como se divese 2 (ía cambiando dunha tarefa á outra todo o rato (concepto de SOI))
+## Concepto de segmentación (pipeline)
+As **unidades de retardo** mídense en **F04**: é o que tarda unha sinal en _atravesar un inversor que ten 4 inversores de saída_ (fan out de 4). _Depende do nodo tecnolóxico_ (tecnoloxía de fabricación).
+
+A **segmentación** consiste en dividir as "fases" dunha instrucción e ir gardando os seus datos en rexitros, de forma que a medida que se executan instruccións, xa se poden ir executando as seguintes (e, grazas aos rexistros, non se mezclan os datos). "Un procesador executa varias instruccións á vez por cachiños".
+As instruccións síguense executando secuencialmente, pero mentres está executándose unha, xa se pode comezar a executar outra.
+![[ConceptoSegmentacion.png| center | 300]]
+**Profundidade de segmentación**: 
+Redúcese o período (o tempo necesrio para executar unha instrucción), polo que aumenta a frecuencia 
+($f=1/T$)
+Poden ocorrer paradas de emisión: momentos nos que non se pode executar a seguinte instrucción nun tempo de reloxo
+Provócanse problemas como consecuencias dos saltos: predicción de saltos
++++
+
+## Arquitectura dun microprocesador multinúcleo
+As cachés soen ter varias irregularidades de fabricación
+Os cores, a memoria caché e o procesador gráfico funcionan a potencias e frecuencias diferentes, debido a que para aforrar enerxía, se unha compoñente pode funcionar a unha frecuencia menor, dáselle esa frecuencia (dominios de frecuencia separados).
+A frecuencia por si mesma, non decide se un ordenador é máis rápido que outro
+
+Tecnoloxía de fabricación:
+Densidade de capas non uniforme ao longo do circuito
+
+Densidade de transistores:
+Según a lei de Moore, cada dous anos pódese meter o dobre de transistores no mesmo espazo. 
+
+Hammering: acceder todo o rato á mesma zona de memoria --> correntes de difusión --> os e- pasan á celda contigua por efecto tunel. Sol: separar os transistores
+
+Capacitancia: cap. de E quepode chegar a transmitir un cable
+
+Power gating: facer dominios de potencia independentes e incluso desconectar da alimentación partes que non se empreguen
+Domain-specific: deseños optimizados en consumo de potencia para unha determinada operación que se repite moito
+
