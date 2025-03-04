@@ -4,21 +4,35 @@
     "type": "split",
     "children": [
       {
-        "id": "0d979da43025647b",
+        "id": "ade922890dbce89d",
         "type": "tabs",
         "children": [
           {
-            "id": "9dab4293e0c45080",
+            "id": "2fcec0f9b1122a13",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "SOII/Tema5.Shell.md",
-                "mode": "preview",
+                "file": "CoGa/ExemplosOpenGL.md",
+                "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Tema5.Shell"
+              "title": "ExemplosOpenGL"
+            }
+          },
+          {
+            "id": "d1683d6d60fca1d8",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "CoGa/ExemplosOpenGL.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "ExemplosOpenGL"
             }
           }
         ]
@@ -178,40 +192,45 @@
       "obsidian-git:Open Git source control": false
     }
   },
-  "active": "9dab4293e0c45080",
+  "active": "2fcec0f9b1122a13",
   "lastOpenFiles": [
-    "CoGa/Introducción.md",
+    "CoGa/Modelado.md",
+    "CoGa/ExemplosOpenGL.md",
+    "CoGa/Imaxes/triangulos_3formas.png",
+    "CoGa/Imaxes/ex_triangle_fan_output.png",
     "CoGa/Tema6.md",
-    "SOII/Tema5.Shell.md",
+    "CoGa/Imaxes/ex_triangles_output.png",
+    "CoGa/Introducción.md",
+    "CoGa/Imaxes/line_loop_output.png",
+    "CoGa/Imaxes/line_loop_codigo.png",
+    "CoGa/Imaxes/line_strip_output.png",
+    "CoGa/Imaxes/line_strip_codigo.png",
+    "CoGa/Imaxes/identificar_caras.png",
+    "CoGa/Imaxes/punto_glut.png",
+    "CoGa/Imaxes/taboa_primitivas_glut.png",
+    "CoGa/Imaxes/Tema5.Shell.md",
+    "SOII/Tanembaum/Tema2.ProcesosFios.md",
+    "SOII/Imaxes",
+    "SOII/Tanembaum",
+    "BDII/Tema3.md",
+    "SOII/Tema1.md",
     "BDII/Tema2.md",
     "BDII/Tema1.md",
-    "BDII/Imaxes/RevocacionCascada.png",
-    "BDII/Imaxes/GrafoAutorizacions.png",
-    "BDII/Imaxes",
     "ArCo/AnexosFuComp.md",
     "ArCo/Tema 1.md",
-    "ArCo/Imaxes/ArquitecturaProcesadorMultinucleo.png",
-    "ArCo/Imaxes/MultiprocesadoresNUMA.png",
-    "ArCo/Imaxes/ArquitecturaNucleoTipico.png",
-    "ArCo/Imaxes/ConceptoSegmentacion.jpg",
-    "ArCo/Imaxes/ConceptoSegmentacion.png",
-    "ArCo/Imaxes/VarRendProcesadores.png",
+    "BDII/Imaxes",
     "ArCo/Introdución.md",
     "ArCo/Practica1.md",
-    "DeSoft/Imaxes/CasoUso1.png",
-    "DeSoft/Imaxes/DiagramaExemplo.png",
     "DeSoft/Tema2.md",
     "DeSoft/Tema1.md",
     "ApuntesCoGa.zip",
     "CoGa/OpenGL.md",
     "ArCo/Imaxes",
-    "SOII/Tema1.md",
     "SOII",
     "DeSoft/Imaxes",
     "DeSoft",
     "BDII",
     "CoGa/Introduccion.md",
-    "ArCo",
-    "Apuntes-Obsidian"
+    "ArCo"
   ]
 }
