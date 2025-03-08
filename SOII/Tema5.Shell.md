@@ -147,7 +147,7 @@ fi
 
 #### Estrutura case ... in:
 ```bash
-case valor in 
+case expresion in 
 	case1) 
 		bloque de comandos 
 		;; 

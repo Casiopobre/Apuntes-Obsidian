@@ -31,6 +31,7 @@ Output:
 ![[ex_triangles_output.png| center | 200]]
 Con `GL_TRIANGLE_FAN`:
 ```c
+glShadeModel(GL_FLAT);
 glBegin(GL_TRIANGLE_FAN);
 	glColor3f (.909f, .180f, .462f); // Color 1
 	glVertex3f( 0.0f,  0.0f, 0.5f); // Centro (V0)
@@ -51,3 +52,22 @@ glEnd();
 Output:
 ![[ex_triangle_fan_output.png| center | 200]]
 
+### Cuadrilateros
+Código:
+```c
+glShadeModel(GL_FLAT);
+glBegin(GL_QUAD_STRIP);
+	glColor3f (.909f, .180f, .462f); // Color 1
+	glVertex3f(-0.5f, 0.5f, 0.5f); // V1
+	glVertex3f(-0.5f, -0.5f, 0.5f); // V2
+	glVertex3f(0.5f, 0.5f, 0.5f); // V4
+	glVertex3f(0.5f, -0.5f, 0.5f); // V3
+
+	glColor3f (.4f, .180f, .462f); // Color 2
+	glVertex3f(1.5f, 0.5f, 0.5f); // V6
+	glVertex3f(1.5f, -0.5f, 0.5f); // V5
+glEnd();
+```
+
+Output:
+![[ex_quad_strip.png| center | 200]]

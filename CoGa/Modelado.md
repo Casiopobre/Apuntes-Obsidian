@@ -16,7 +16,7 @@ As primitivas máis bśicas en OpenGL son os puntos, as liñas e os triángulos:
 ![[primitivas1.png | center | 500]]
 
 ### Triangulación/Tessellation
-Consiste en dividir obxetos en _triángulos_ para o seu renderizado. Para teselar claquera polígono de $n$ lados farán falta $n-2$ triángulos.
+Consiste na creación ou transformación de figuras xeométricas a partires de **polígonos** (xeralmente triángulos, xa que son a figura xeométrica máis simple que delimita un plano). Para teselar claquera polígono de $n$ lados farán falta $n-2$ _triángulos_.
 
 ### Identificación de caras
 A **normal** da cara ven determinada pola _orde na que se especifican os vértices_. Para estimar a normal dunha cara podemos empregar a _regra da man dereita_ ou ben mirar a _dirección_ na que se debuxan as arestas:
@@ -60,4 +60,129 @@ Con OpenGL podemos xerar triángulos de varias **formas**:
 **[[ExemplosOpenGL#Triangulos| _Ver exemplos de código_]]**
 
 #### Cuadriláteros
+Con `GL_QUAD_STRIP` créase unha tira de **cuadriláterios**, empregando os catro primeiros vértices para o primeiro cadrado (de forma que _aos dous ultimos se lles invirte a orde_ $\to$ V1 V2 V4 V3). A partir de ahí, cada novo cadrado se crea cos dous últimos vértices do anterior cadrado (en orden) e cos dous seguintes vértices (en orde inversa).
+![[quad_strip.png| center | 250]]
+**[[ExemplosOpenGL#Cuadrilateros| _Ver exemplo de código_]]**
 
+#### Polígonos
+Temos as seguintes **restriccións**: 
++ Os polígonos deben ser _convexos sen cavidades_ 
++ Os seus _lados non_ deben _cortarse_.
+##### Modos poligonais
+Temos a función **`glPolygonMode()`**, que especifica o modo de **rasterización** dos polígonos (especifica como se representan os polígonos, non como se ensamblan): 
+`glPolygonMode(GLenum cara, GLenum modo);`
++ `cara` $\to$ especifica a _que cara_ afectan os cambios (`GL_FRONT`, `GL_BACK` ou `GL_FRONT_AND_BACK`)
++ `modo` $\to$ especifica como se _pintan_ as caras (`GL_FILL`, `GL_LINE` ou `GL_POINT`)
+
+### Listas de visualización
+Son **indices** que nos permiten gardar un _conxunto de vertices_ mediante un _identificador_ (int único) para despois poder renderizalos invocando dito identificador (índice).
+
+Para **construír** unha lista de visualización:
+```c
+IndiceLista = glGenLists(1); // Identificador = IndiceLista
+glNewList(IndiceLista, GL_COMPILE);
+
+glBegin(GL_QUADS);
+	glVertex3f(-1.0f, -1.0f, -1.0f);
+	glVertex3f(1.0f, -1.0f, -1.0f);
+	glvertex3f(1.0f, -1.0f, 1.0f);
+	glVertex3f(-1.0f, -1.0f, 1.0f);
+glEndList();
+```
+\*`glGenLists` é unha lista correlativa de índices vacíos para almacear listas.
+\*\*Valores para o segundo arg de `glNewList`: `GL_COMPILE` ou `GL_COMPILE_AND_EXECUTE`.
+
+Para **chamar** a unha lista de visualización:
+```c
+glCallList(IndiceLista)
+```
+Cando se chama a unha lista, debuxarase a figura xa especficada (e xa compilada), o que aforra tempo
+\*É equivalente ao uso de VAO e VBO con glad (OpenGL 3.3)
+
+### Formas básicas en GLUT (GL Utility Toolkit)
+![[formas_basicas_glut.png| center | 350]]
+
+## Modelado en OpenGL 3.3 (GLFW/glad)
+![[Pasted image 20250305185105.png | center | 500]]
+### Tipos de shaders
++ **Vertex shader**:
+	+ É unha función que _recibe vértices_ como parámetros e _devolve a súa posición_ como saída.
+	+ Manipula vértices en 3D; cor, coordenadas de textura, orientación e tamaño dos vértices.
++ **Fragment shader**:
+	+ Recibe a _información_ de cada _fragmento_ (toda a información necesaria para debuxar un píxel) e devolve a _cor de cada píxel_.
+	+ Aplícase na última etapa de rasterizado.
+_Despois_ do fragment shader realízanse unha serie de _comprobacións_ relativas ao Alpha test (transparencias), Blending test e Depth test (profundidade).
+### Envío de vértices
+Empréganse **arrays de vértices** (**Vertex Array Objects, VAO**) nos que se almacena _información do obxecto_ (vertices e atributos) a debuxar. Para engadir os atributos ao VAO, empréganse os **VBO** (**Vertex Buffer Objects**)
+```c
+// Definir os vértices (un triángulo)
+float vertices[] = {
+    -0.5f, -0.5f, 0.0f, // Vértice 1
+     0.5f, -0.5f, 0.0f, // Vértice 2
+     0.0f,  0.5f, 0.0f  // Vértice 3
+};
+
+// Crear VAO e VBO
+unsigned int VAO, VBO;
+glGenVertexArrays(1, &VAO);
+glGenBuffers(1, &VBO);
+
+// Configurar VAO e VBO
+glBindVertexArray(VAO);
+glBindBuffer(GL_ARRAY_BUFFER, VBO);
+glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+// Especificar cómo interpretar os datos do VBO
+glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+glEnableVertexAttribArray(0);
+
+// Desvincular buffers
+glBindBuffer(GL_ARRAY_BUFFER, 0);
+glBindVertexArray(0);
+
+// Renderizar no bucle de debuxo
+glUseProgram(shaderProgram);
+glBindVertexArray(VAO);
+glDrawArrays(GL_TRIANGLES, 0, 3); // Debuxa o triangulo
+glBindVertexArray(0);
+```
+\*Parámetros de `glVertexAttribPointer(GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, const void *pointer);`
++ `index` $\to$ índice do atributo no shader (ver abaixo: `layout (location = 0)`)
++ `size` $\to$ número de componentes por vértice (x, y, z)
++ `type` $\to$ tipo de dato
++ `normalized` $\to$ se queremos ou non normalización automática
++ `stride` $\to$ espacio total que ocupa cada vértice no array (neste caso 3 floats, se lle metemos color, serían 6 floats: 3 para o vertice e 3 para a cor)
++ `pointer` $\to$ (offset) posición inicial dos datos (se tivesemos cor, sería de 3 floats, xa que a cor comeza despois dos3 primeiros floats)
+
+### Xestión de vértices
+Despois de mandar os vértices ao pipe, xestiónanse mediante os **shaders**.
+Os shaders están escritos nunha _linguaxe_ parecida a C chamada _GLSL_, dirixida a manipular vectores e matrices. Usualmente teñen esta **estrutura**:
+```c
+#version version_number
+in type in_variable_name;
+in type in_variable_name;
+
+out type out_variable_name;
+  
+uniform type uniform_name;
+  
+void main()
+{
+  // process input(s) and do some weird graphics stuff
+  ...
+  // output processed stuff to output variable
+  out_variable_name = weird_stuff_we_processed;
+}
+```
+Específicamente, cando nos referimos a un vertex shader, cada variable de input chámase _vertex attribute_.
+
+Primeiro o **vertex shader** nos devolve a _posición_ dos vértices, e que se almacena como un arquivo de texto no directorio de uso:
+```c
+#version 330 core
+layout (location = 0) in vec3 aPos; // Input = vector (x,y,z) --> aPos
+void main() {
+	gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);
+}
+```
+
+Despois o **fragment shader** encárgase de calcular a cor de cada pixel
