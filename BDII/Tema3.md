@@ -1,4 +1,4 @@
-# Tema 3. Transaccións
+Doc# Tema 3. Transaccións
 [MathJax Quick Reference](https://math.meta.stackexchange.com/questions/5020/mathjax-basic-tutorial-and-quick-reference)
 ## Concepto de transacción
 Unha **transacción** é unha _unidade lóxica_ de traballo que agrupa _varias operacións_ sobre unha BD. As transaccións son esenciais para evitar problemas de integridade e concurrenciana BD.
@@ -71,4 +71,4 @@ Así, se $\exists$ unha aresta $T_i \to T_j$, entón, en calquera planificación
 ## Aislamento e atomicidade
 Cando unha transacción falla, débese desfacer o se efecto para manter aatomicidade da transacción. Esto pódese complicar cando temos varias transaccións concurrentes que dependen unhas doutras.
 ### Planificacións recuperables
-Unha planificación dise que é recuperable cando, $\forall$  
+Unha planificación dise que é recuperable cando, $\forall$ par de transaccións $T_i, T_j$ $/$ $T_j$ lee datos que escribiu previamente $T_i$, a operación de commit de $T_j$ 

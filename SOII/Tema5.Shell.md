@@ -71,8 +71,7 @@ Podemos **redireccionar** a E/S con:
 ```
 + `>>`: redirección de saída estándar a un arquivo (en modo concatenación, polo que engade o contido ao final do arquivo sen sobreescribilo)
 + **`|`**: **Pipe**. Redirixe a _saída dun comando á entrada doutro_
-\* Para redirección do `stderr`: `2>`
-
+\* ==Para redirección do `stderr`: `2>`==
 #### Avaliación de comandos
 Os comandos teñen un **código de saída** que se almacena en **`$?`**: 0 se terminou ben; >0 se terminou cun erro
 Pódense executar **varios comandos seguidos condicionalmenvarios comandos seguidos condicionalmentete** con `&&` ou `||`: `cmnd1 && cmnd2`
