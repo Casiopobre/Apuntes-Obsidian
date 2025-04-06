@@ -78,8 +78,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 200,
-    "collapsed": true
+    "width": 200
   },
   "right": {
     "id": "7d25637a7703bb37",
@@ -180,6 +179,7 @@
   },
   "active": "c9a13f690a1d8e0a",
   "lastOpenFiles": [
+    "BDII/Imaxes/exexmploAlgoritmoRevision.png",
     "BDII/Tema5.md",
     "BDII/Tema3.md",
     "BDII/Tema1.md",
@@ -205,7 +205,6 @@
     "ArCo/Imaxes/ArquitecturaProcesadorMultinucleo.png",
     "CoGa/Imaxes/Pasted image 20250305185105.png",
     "CoGa/Introducción.md",
-    "CoGa/Imaxes/taboas_indexadas.png",
     "CoGa/ExemplosOpenGL.md",
     "Untitled.canvas",
     "SOII/Tanembaum/Tema2.ProcesosFios.md",

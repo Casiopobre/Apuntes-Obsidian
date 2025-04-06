@@ -127,8 +127,64 @@ Cando **se produce un fallo** $\rightarrow$ o esquema de recuperación busca no 
 > **Punto de revisión difuso**: punto de revisión no que se permiten transaccións mentres se escriben en disco os bloques de memoria intermedia
 
 ## Algoritmo de revisión
+Require que **non se poidan modificar os datos** das transaccións en curso por ningunha outra transacción _ata que a primeira remate_ (se comprometa ou aborte).
 
+### Retroceso de transaccións
+**Proceso de retroceso** dunha transacción $T_{i}$:
+1. **Percórrese o rexistro histórico** dende atrás e para cada rexistro $T_i$ da forma $<T_{i}, X_{j}, V_{1}, V_{2}>$, é decir, para cada **rexistro de actualización**:
+	1. Escríbese o _valor anterior_ ($V_{1}$) no _elemento de datos_ ($X_{j}$)
+	2. Escríbese no rexistro histórico un _rexistro especial de só-refacer_ da forma $<T_{i}, X_{j}, V_{1}>$, onde $V_1$ é o valor que restablece durante o restroceso (tamén se lles chama _rexistros de compensación de rexistro histórico_)
+2. Cando atopa $<T_{i}$ iniciada $>$, **detense o percorrido** cara atrás e se escribe o rexistro $<T_{i}$ aboratda $>$ no rexistro histórico
 
+### Recuperación tras un fallo no sistema
+Este proceso denomínase **repetición da historia**, xa que se repiten tódalas _accións de modificación_ que se executaron despois do punto de revisión e que teñen os seus rexistros en rexistro histórico, _na mesma orde_ na que se levaron a cabo $\rightarrow$ simplifica os esquemas de recuperación
+#### 1. Fase refacer
+Vólvense a realizar **modificacions de tódalas transaccións**, percorrendo o rexistro histórico cara adiante dende o _último punto de revisión_: vólvense a executar tanto os rexistros que aínda non se comprometeran, como os das transaccións que retrocederon _antes da caída do sistema_.
+
+Tamén se determinan as **transaccións que se deben retroceder** por estar _incompletas_ (non ter un abortada nin comprometida no rexistro histórico):
+1. A **lista-desfacer** (das transaccións que se deben retroceder) establécese inicialmente á _lista L_ do rexistro $<$revisión $L>$
+2. Cando se atopa un _rexistro de actualización_ da forma $<T_{i}, X_{j}, V_{1}, V_{2}>$ ou un _rexistro de só-refacer_ da forma $<T_{i}, X_{j}, V_{1}>$, **refaise a operación** $\rightarrow$ escríbese o _valor de $V_2$ no elemento de datos $X_{j}$_
+3. Cando se atopa un rexistro da forma **$<T_{i}$ iniciada $>$** $\rightarrow$ _engádese $T_i$ á lista-desfacer_
+4. Cando se atopa un rexistro da forma **$<T_{i}$ abortada $>$** ou **$<T_{i}$ comprometida $>$** $\rightarrow$ _elimínase $T_i$ da lista-desfacer_
+Así, ao final desta fase, ==a lista-desfacer contén tódalas transaccións incompletas==.
+#### 2. Fase desfacer
+**Retrocédense** tódalas transaccións da **lista-desfacer** percorrendo o rexistro histórico cara atrás _empezando polo máis recente_:
+1. Cando atopa un rexistro dunha **transacción da lista-desfacer**, _desfaise_ a transacción de forma normal (como se forse unha transacción fallida).
+2. Cando se atopa un rexistro **$<T_{i}$ iniciada $>$** para unha **transacción da lista-desfacer**, escríbse no rexistro histórico un rexistro _$<T_{i}$ abortada $>$_ e _se elimina $T_i$ da lista-desfacer_.
+3. Cando a **lista-desfacer está baleira**, remata a fase desfacer, xa que significa que _o sistema atopou rexistros $<T_{i}$ iniciada $>$ para tódalas transaccións da lista-desfacer_.
+A partires de aquí, pode reanudarse o procesamento normal de transaccións.
+
+#### Exemplo 
+No seguinte rexistro histórico, vemos que $T_0$ retrocedeuse antes do fallo do sistema e que $T_1$ está comprometida. En este exemplo, vaise _recuperar o valor do elemento de datos B_ durante o retroceso de $T_0$.
+
+Fase refacer: o sistema refai tódalas operacións posteriores ao último punto de revisión.
+1. Lista-desfacer = $T_{0}$, $T_1$
+2. Atópase $<T_{1}$ comprometida $>$ $\rightarrow$ elimínase $T_1$ da lista-desfacer
+3. Atópase $<T_{2}$ iniciada $>$ $\rightarrow$ engádese $T_2$ á lista-desfacer
+4. Atópase $<T_{0}$ abortada $>$ $\rightarrow$ elimínase $T_0$ da lista-desfacer
+5. Lista-desfacer final = $T_2$
+
+Fase desfacer: 
+1. Atopa $<T_2\ A, 500, 400>$ (rexitstro só-refacer que actualiza A) $\rightarrow$ _recupera o valor anterior_ de A e se escribe o rexistro de só-refacer $<T_2\ A, 500, 400>$ no rexistro histórico
+2. Atopa o rexistro $<T_{2}$ iniciada $>$ $\rightarrow$ engade un rexistro $<T_{2}$ abortada $>$ no rexistro histórico.
+![[exexmploAlgoritmoRevision.png| center]]
+
+## Fallo con perda de almacenamento non volátil
+### Volcado de arquivo
+Para evitar a perda de información, **vólcase periódicamente todo o contido da BD en almacenamento estable** (como cintas magnéticas) $\rightarrow$ para recuperarse dun fallo, emprégase o _volcado máis recente_.
+Este método require que _ningunha transacción estea activa durante o proceso de volcado_ e emprega un procedemento similar ao dos puntos de revisión:
+1. Escribe en _almacenamento estable_ tódolos rexistros do _rexistro histórico_ que estean en _memoria principal_
+2. Escribe en _disco_ tódolos bloques de _memoria intermedia_
+3. Copia o contido da _BD en almacenamento estable_ 
+4. _Escribe no rexistro histórico o rexistro $<$volcar$>$_
+
+Así, para a **recuperación por perda de almacenamento non volátil**, _restáurase a BD_  co último volcado e se _consulta o rexistro histórico_ para refacer tódalas transaccións posteriores ao volcado (non é necesario executar ningún desfacer).
+
+### Volcado SQL
+Escríbense **sentencias SQL DLL e sentencias insertar de SQL** nun arquivo para volver a executalas co obxectivo de _reconstruír a BD_. É moi útil cando se migran datos a unha versión de software diferente.
+
+### Volcado difuso
+Permiten que as **transaccións sigan activas** mentres se realiza o volcado $\rightarrow$ evita a perda de ciclos de CPU.
 
 
 
