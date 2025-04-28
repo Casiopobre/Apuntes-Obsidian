@@ -56,10 +56,15 @@ O rexistro histórco é unha **secuencia de rexistros** que almacena todas as *a
 + $V_{1}$ $\rightarrow$ _valor anterior_ do elemento de datos (antes da escritura)
 + $V_{2}$ $\rightarrow$ _valor posterior_ do elemento de datos (despois da escritura)
 Polo tanto, unha actualización represéntase da seguinte maneira: $<T_{i}, X_{j}, V_{1}, V_{2}>$
-_Outros tipos_ de rexistro histórico son:
-+ $<T_{i}$ iniciada $>$ 
-+ $<T_{i}$ comprometida $>$
-+ $<T_{i}$ abortada $>$
+
+>[!Tipos de rexistro de rexistro histórico]
+> + Rexistro de actualización: $<T_{i}, X_{j}, V_{1}, V_{2}>$
+> + Rexistro só-refacer: $<T_{i}, X_{j}, V_{1}>$
+> + $<T_{i}$ iniciada $>$ 
+> + $<T_{i}$ comprometida $>$
+> + $<T_{i}$ abortada $>$
+> + $<$revisión $L >$
+
 > [!Nota]
  Considérase unha transacción comprometida aínda que os datos non estean aínda no disco, xa que **é máis importante que os cambios estean reflectidos no rexistro histórico**, que se garda en memoria estable, que no disco.
 
@@ -126,7 +131,7 @@ O rexistro $<$revisión $L >$ permite facer _máis eficiente_ o proceso de recup
 Cando **se produce un fallo** $\rightarrow$ o esquema de recuperación busca no rexistro histórico o _último rexistro_ de tipo $<$revisión $L>$ $\rightarrow$ aplica desfacer ou refacer só ás _transaccións de L_ e as que se iniciasen _despois_ do rexistro $<$revisión $L >$
 > **Punto de revisión difuso**: punto de revisión no que se permiten transaccións mentres se escriben en disco os bloques de memoria intermedia
 
-## Algoritmo de revisión
+## Algoritmo de recuperación
 Require que **non se poidan modificar os datos** das transaccións en curso por ningunha outra transacción _ata que a primeira remate_ (se comprometa ou aborte).
 
 ### Retroceso de transaccións
@@ -143,7 +148,7 @@ Vólvense a realizar **modificacions de tódalas transaccións**, percorrendo o 
 
 Tamén se determinan as **transaccións que se deben retroceder** por estar _incompletas_ (non ter un abortada nin comprometida no rexistro histórico):
 1. A **lista-desfacer** (das transaccións que se deben retroceder) establécese inicialmente á _lista L_ do rexistro $<$revisión $L>$
-2. Cando se atopa un _rexistro de actualización_ da forma $<T_{i}, X_{j}, V_{1}, V_{2}>$ ou un _rexistro de só-refacer_ da forma $<T_{i}, X_{j}, V_{1}>$, **refaise a operación** $\rightarrow$ escríbese o _valor de $V_2$ no elemento de datos $X_{j}$_
+2. Cando se atopa un _rexistro de actualización_ da forma $<T_{i}, X_{j}, V_{1}, V_{2}>$ ou un _rexistro de só-refacer_ da forma $<T_{i}, X_{j}, V_{1}>$, **refaise a operación** $\rightarrow$ escríbese o _valor de $V_2$ no elemento de datos $X_j$ ._
 3. Cando se atopa un rexistro da forma **$<T_{i}$ iniciada $>$** $\rightarrow$ _engádese $T_i$ á lista-desfacer_
 4. Cando se atopa un rexistro da forma **$<T_{i}$ abortada $>$** ou **$<T_{i}$ comprometida $>$** $\rightarrow$ _elimínase $T_i$ da lista-desfacer_
 Así, ao final desta fase, ==a lista-desfacer contén tódalas transaccións incompletas==.
@@ -154,19 +159,19 @@ Así, ao final desta fase, ==a lista-desfacer contén tódalas transaccións inc
 3. Cando a **lista-desfacer está baleira**, remata a fase desfacer, xa que significa que _o sistema atopou rexistros $<T_{i}$ iniciada $>$ para tódalas transaccións da lista-desfacer_.
 A partires de aquí, pode reanudarse o procesamento normal de transaccións.
 
-#### Exemplo 
-No seguinte rexistro histórico, vemos que $T_0$ retrocedeuse antes do fallo do sistema e que $T_1$ está comprometida. En este exemplo, vaise _recuperar o valor do elemento de datos B_ durante o retroceso de $T_0$.
-
-Fase refacer: o sistema refai tódalas operacións posteriores ao último punto de revisión.
-1. Lista-desfacer = $T_{0}$, $T_1$
-2. Atópase $<T_{1}$ comprometida $>$ $\rightarrow$ elimínase $T_1$ da lista-desfacer
-3. Atópase $<T_{2}$ iniciada $>$ $\rightarrow$ engádese $T_2$ á lista-desfacer
-4. Atópase $<T_{0}$ abortada $>$ $\rightarrow$ elimínase $T_0$ da lista-desfacer
-5. Lista-desfacer final = $T_2$
-
-Fase desfacer: 
-1. Atopa $<T_2\ A, 500, 400>$ (rexitstro só-refacer que actualiza A) $\rightarrow$ _recupera o valor anterior_ de A e se escribe o rexistro de só-refacer $<T_2\ A, 500, 400>$ no rexistro histórico
-2. Atopa o rexistro $<T_{2}$ iniciada $>$ $\rightarrow$ engade un rexistro $<T_{2}$ abortada $>$ no rexistro histórico.
+> [!Exemplo] 
+ No seguinte rexistro histórico, vemos que $T_0$ retrocedeuse antes do fallo do sistema e que $T_1$ está  comprometida. En este exemplo, vaise _recuperar o valor do elemento de datos B_ durante o retroceso de $T_0$.
+ >
+ **Fase refacer**: o sistema refai tódalas operacións posteriores ao último punto de revisión.
+> 1. Lista-desfacer = $T_{0}$, $T_1$
+ >2. Atópase $<T_{1}$ comprometida $>$ $\rightarrow$ elimínase $T_1$ da lista-desfacer
+ >3. Atópase $<T_{2}$ iniciada $>$ $\rightarrow$ engádese $T_2$ á lista-desfacer
+ >4. Atópase $<T_{0}$ abortada $>$ $\rightarrow$ elimínase $T_0$ da lista-desfacer
+ >5. Lista-desfacer final = $T_2$
+ >
+> **Fase desfacer**: 
+>    6. Atópase $<T_2\ A, 500, 400>$ (rexitstro só-refacer que actualiza A) $\rightarrow$ _recupera o valor anterior_ de A e se escribe o rexistro de só-refacer $<T_2\ A, 500, 400>$ no rexistro histórico
+>    7.  Atópase o rexistro $<T_{2}$ iniciada $>$ $\rightarrow$ engade un rexistro $<T_{2}$ abortada $>$ no rexistro histórico.
 ![[exexmploAlgoritmoRevision.png| center]]
 
 ## Fallo con perda de almacenamento non volátil

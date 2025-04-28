@@ -1,0 +1,10 @@
+{
+  "catppuccin-heading-settings@@ctp-h1": "var(--ctp-moradito)",
+  "catppuccin-heading-settings@@ctp-h2": "var(--ctp-moradito)",
+  "catppuccin-heading-settings@@ctp-h3": "var(--ctp-moradito)",
+  "catppuccin-heading-settings@@ctp-h4": "var(--ctp-moradito)",
+  "catppuccin-heading-settings@@ctp-h5": "var(--ctp-moradito)",
+  "catppuccin-heading-settings@@ctp-h6": "var(--ctp-moradito)",
+  "catppuccin-font-styles@@ctp-strikethrough": "var(--ctp-accent)",
+  "catppuccin-pdf@@ctp-pdf-darken": true
+}

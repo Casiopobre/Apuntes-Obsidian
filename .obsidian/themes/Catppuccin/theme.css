@@ -1025,6 +1025,9 @@ settings:
       -
         label: Gray
         value: var(--ctp-subtext0)
+      -
+        label: Moradito
+        value: var(--ctp-moradito)
   -
     id: ctp-h2
     title: H2 color
@@ -1084,6 +1087,9 @@ settings:
       -
         label: Gray
         value: var(--ctp-subtext0)
+      -
+        label: Moradito
+        value: var(--ctp-moradito)
   -
     id: ctp-h3
     title: H3 color
@@ -1143,6 +1149,9 @@ settings:
       -
         label: Gray
         value: var(--ctp-subtext0)
+      -
+        label: Moradito
+        value: var(--ctp-moradito)
   -
     id: ctp-h4
     title: H4 color
@@ -1202,6 +1211,9 @@ settings:
       -
         label: Gray
         value: var(--ctp-subtext0)
+      -
+        label: Moradito
+        value: var(--ctp-moradito)
   -
     id: ctp-h5
     title: H5 color
@@ -1261,6 +1273,9 @@ settings:
       -
         label: Gray
         value: var(--ctp-subtext0)
+      -
+        label: Moradito
+        value: var(--ctp-moradito)
   -
     id: ctp-h6
     title: H6 color
@@ -1320,6 +1335,9 @@ settings:
       -
         label: Gray
         value: var(--ctp-subtext0)
+      -
+        label: Moradito
+        value: var(--ctp-moradito)
 */
 /* @settings
 name: "Catppuccin: PDF Settings"
@@ -1427,7 +1445,7 @@ settings:
 .theme-light.ctp-latte {
   --ctp-rosewater: 220, 138, 120;
   --ctp-flamingo: 221, 120, 120;
-  --ctp-pink: 234, 118, 203;
+  --ctp-pink: 231, 82, 161;
   --ctp-mauve: 136, 57, 239;
   --ctp-red: 210, 15, 57;
   --ctp-maroon: 230, 69, 83;
@@ -1451,8 +1469,9 @@ settings:
   --ctp-base: 239, 241, 245;
   --ctp-mantle: 230, 233, 239;
   --ctp-crust: 220, 224, 232;
-  --hex-pink: #ea76cb;
-  --hex-mauve: #8839ef;
+  --ctp-moradito: 128, 89, 162;
+  --hex-pink: #f36f98;
+  --hex-mauve: #8059a2; /* MODIFICADO */
   --hex-red: #d20f39;
   --hex-peach: #fe640b;
   --hex-yellow: #df8e1d;

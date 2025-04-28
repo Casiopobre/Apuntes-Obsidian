@@ -4,21 +4,35 @@
     "type": "split",
     "children": [
       {
-        "id": "e84bd59552c38f1e",
+        "id": "dc0e76ec5109ec49",
         "type": "tabs",
         "children": [
           {
-            "id": "c9a13f690a1d8e0a",
+            "id": "ddb19dfad2a82c68",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "BDII/Tema5.md",
+                "file": "SOII/Tema1.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Tema5"
+              "title": "Tema1"
+            }
+          },
+          {
+            "id": "f1bf0c2e7ccb535f",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "SOII/Tema1Isma/Comunicación y sincronización entre procesos e hilos.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Comunicación y sincronización entre procesos e hilos"
             }
           }
         ]
@@ -78,7 +92,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 200
+    "width": 200,
+    "collapsed": true
   },
   "right": {
     "id": "7d25637a7703bb37",
@@ -177,51 +192,53 @@
       "obsidian-git:Open Git source control": false
     }
   },
-  "active": "c9a13f690a1d8e0a",
+  "active": "ddb19dfad2a82c68",
   "lastOpenFiles": [
-    "BDII/Imaxes/exexmploAlgoritmoRevision.png",
-    "BDII/Tema5.md",
+    "SOII/InformesSOII/SOII_Informe2.pdf",
+    "SOII/Tema1.md",
+    "SOII/InformesSOII/SOII_Informe1.pdf",
+    "SOII/Tema2.md",
+    "SOII/InformesSOII/SOII_Informe5.pdf",
+    "SOII/InformesSOII/SOII_Informe4.pdf",
+    "SOII/InformesSOII/SOII_Informe3.pdf",
+    "SOII/InformesSOII",
+    "I.md",
+    "SOII/Tema1Isma/Comunicación y sincronización entre procesos e hilos.md",
+    "SOII/Imaxes/interbloqueosSemaforos.png",
+    "SOII/Imaxes/CompAbstractoExMutua.png",
+    "SOII/Tema1Isma/Imagenes/AlternanciaEstricta.png",
+    "ArCo/Untitled.md",
+    "SOII/Imaxes/exemploSpooler.png",
+    "SOII/Tanembaum/Tema2.ProcesosFios.md",
+    "SOII/Tema1Isma/Imagenes/variables_condicion_pthread.png",
+    "SOII/Tema1Isma/Imagenes/pthread_mutex.png",
+    "SOII/Tema1Isma/Imagenes/mutex_variables_prod_cons.png",
+    "SOII/Tema1Isma/Imagenes/SolucionPeterson.png",
+    "SOII/Tema1Isma/Imagenes/Productor_Consumidor_Semaforos.png",
+    "SOII/Tema1Isma/Imagenes/Productor_Consumidor.png",
+    "SOII/Tema1Isma/Imagenes",
+    "SOII/Tema1Isma",
     "BDII/Tema3.md",
     "BDII/Tema1.md",
     "BDII/Tema2.md",
-    "BDII/Imaxes/Pasted image 20250405214331.png",
+    "ProgramacionII/Tema5.md",
+    "ProgramacionII/Exercicios.md",
     "CoGa/Tema6.md",
     "CoGa/Modelado.md",
-    "BDII/Imaxes/transferenciaDatos.png",
+    "CoGa/Introducción.md",
+    "CoGa/ExemplosOpenGL.md",
+    "BDII/Tema5.md",
     "ArCo/Tema3.md",
-    "ArCo/Imaxes/ExemploPlanificacionMIPSDual.png",
-    "ArCo/Imaxes/MIPSEmisionDualEstCaminoDatos.png",
-    "ArCo/Imaxes/MIPSEmisionDualEstat.png",
     "ArCo/Tema 1.md",
     "SOII/Tema5.Shell.md",
-    "ProgramacionII/Exercicios.md",
-    "ProgramacionII/Tema5.md",
     "ProgramacionII/Exemplos.md",
-    "ProgramacionII/Imaxes/exemploTallas.png",
     "ProgramacionII/Imaxes",
     "ProgramacionII",
     "ArCo/Introdución.md",
-    "CoGa/Imaxes/primitivas1.png",
-    "ArCo/Imaxes/ArquitecturaProcesadorMultinucleo.png",
-    "CoGa/Imaxes/Pasted image 20250305185105.png",
-    "CoGa/Introducción.md",
-    "CoGa/ExemplosOpenGL.md",
     "Untitled.canvas",
-    "SOII/Tanembaum/Tema2.ProcesosFios.md",
-    "SOII/Imaxes",
-    "SOII/Tanembaum",
-    "SOII/Tema1.md",
     "ArCo/AnexosFuComp.md",
-    "BDII/Imaxes",
     "ArCo/Practica1.md",
     "DeSoft/Tema2.md",
-    "DeSoft/Tema1.md",
-    "ApuntesCoGa.zip",
-    "CoGa/OpenGL.md",
-    "ArCo/Imaxes",
-    "SOII",
-    "DeSoft/Imaxes",
-    "DeSoft",
-    "CoGa/Introduccion.md"
+    "DeSoft/Tema1.md"
   ]
 }

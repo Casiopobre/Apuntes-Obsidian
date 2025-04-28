@@ -3,5 +3,6 @@
   "textFontFamily": "Liberation Serif",
   "enabledCssSnippets": [
     "Image_Align"
-  ]
+  ],
+  "theme": "obsidian"
 }
