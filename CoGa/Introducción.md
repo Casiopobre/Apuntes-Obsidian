@@ -47,7 +47,6 @@ As escenas parten dun conxunto de vétices (obxetos), que, ao inicio, se traslad
 ### Retained mode
 Implementa os shaders, que se meten entre o proceso de colocación dos vértices e entre o proceso de coloración dos fragmentos, xa que as GPUs modernas implementan moitas características que lles permiten "operar con estes elementos moi eficientemente"
 
-### Construcción de obxetos
 
 
 

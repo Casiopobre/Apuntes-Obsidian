@@ -4,5 +4,6 @@
   "enabledCssSnippets": [
     "Image_Align"
   ],
-  "theme": "obsidian"
+  "theme": "obsidian",
+  "baseFontSize": 16
 }

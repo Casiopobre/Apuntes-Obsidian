@@ -127,7 +127,7 @@ void salir_region(int proceso) {
 
 Para **empregar TSL** necesitamos unha variable compartida `CANDADO` que coordine o acceso ás rexións críticas: cando `CANDADO == 0` $\rightarrow$ calquera proceso pode poñelo a 1 (chamada a TSL) e devolvelo a 0 cando remate (`MOVE` ordinario). 
 
-**Para evitar que dous procesos entren ao mesm tempo nunha rexión crítica**:
+**Para evitar que dous procesos entren ao mesmo tempo nunha rexión crítica**:
 ```asm
 entrar_region:
 	TSL REGISTRO,CANDADO ;Copia o candado ao rexistro e pon candado a 1
@@ -237,8 +237,170 @@ void consumidor(void) {
 
 ### Mutexes
 Básicamente son como unha _versión simplificada dos semáforos_ (sen a habilidade de contar), é decir, unha variable que toma valores binarios (0 ou 1). A os mutexes dáselles ben únicamente **administrar a exclusión mútua**, e son eficientes e sinxelos de implementar. Están rexidos por **dúas operacións atómicas**:
-+ **`lock`**
-+ **`unlock`**
++ **`lock`**: se o mutex está aberto (mutex = 0) $\rightarrow$ a rexión crítica está dispoñible $\rightarrow$ a chamada ten éxito (en caso contrario, o fío bloquéase ata que a rexión crítica estea dispoñible)
++ **`unlock`**: pon o mutex a 1 $\rightarrow$ desbloquea a rexión crítica 
+
+As operacións `lock` e `unlock` pódense implementar facilmente _con instruccións TSL ou XCHG_:
+```asm
+mutex_lock:
+	TSL REXISTRO, MUTEX    ; copia mutex ao rexistro e pon mutex a 1
+	CMP REXISTRO, $0       ; mutex == 0?
+	JZE ok                 ; if (mutex == 0) return
+	CALL thread_yield      ; if (mutex != 0) planifica outro fio
+ok: RET                    ; return (entra na rexion critica)
+
+mutex_unlock:
+	MOVE MUTEX, $0         ; pon o mutex a 0
+	RET                    ; return (volve ao procedemento chamador)
+```
+> [!Diferencia entre procesos e fíos]
+> Unha **diferencia entre procesos e fíos** é que no caso dos procesos, tarde ou temprano o proceso que mantén o mutex pasa a executarse (gracias o clock) e o libera; mentres que no caso dos fíos __non hai un reloxo que pare os fíos que levan moito tempo executándose__. Por eso no procedemento `mutex_lock`, cando este non pode adquirir un mutex chama a `thread_yield` para ceder a CPU a outro fío, polo que _non hai espera ocupada_ per se (xa que cando o fío se volve a executar, volve a avaliar o mutex). De esta forma, dado que `thread_yield` só é unha chamada ao planificador de fios, as funcións de `mutex_lock` e `mutex_unlock` _non requiren chamadas ao kernel_, o que fai que sexan procedementos _moi rápidos_.
+
+> [!Diferencia entre procesos e fíos]
+> Outra diferencia entre procesos e fíos e que **os fíos comparten un espazo de direccións común mentres que os procesos non**. No caso dos _procesos_, teñen algunhas _estruturas de datos compartidas_ que se poden _almacenar no kernel_ e acceder a elas mediante _syscalls_; ademáis de poder compartir un cacho do seu espazo de direccións con outros procesos (no peor dos casos, tamén se pode empregar un arquivo compartido). Se os procesos compartisen os seusespazos de direccións, a diferencia entre procesos e fíos sería case nula, pero aínda así, dado que o kernel está moi involucrado na administración dos procesos, estes nunca terán a eficiencia dos fíos a nivel de usuario. 
+
+_Chamadas de Pthreads relacionadas con mutexes_:
+![[pthreadsMutexes.png | center | 360]]
+#### Variables de condición
+As variables de condición son un _mecanismo de sincronización_ que serven para **bloquear threads ata que se cumpla unha condición** determinada, polo que están _asociadas a mutexes_. Permiten que a espera e bloqueo se realicen de forma atómica.
+_Chamadas a Pthreads relacionadas con variables de condición_:
+![[Pasted image 20250501153532.png | center | 450]]
+
+Para a **sincronización de fíos**, empréganse tanto _mutexes_ como _variables de condición_ en conxunto da seguinte forma: un _fío pecha un mutex_ e despois _espera a unha variable de condición_ cando non poida obter o que necesita:
+![[sincronizacionFios.png | center | 500]]
+
+[[SOII_InformePractica3.pdf | Ver Problema do consumidor resolto con mutexes e variablesde condición.]]
+
+### Monitores
+Un monitor é un **mecanismo de sincronización de alto nivel** que asegura unha _menor probabilidade de erro_ pero é _menos versátil_. Ten unha estrutura similar á de un obxecto na que se definen procedementos, variables e estruturas de datos. 
+Permiten a **exclusión mútua garantizada** gracias a que nun monitor só pode haber un proceso activo en cada instante: o compilador recoñece o monitor e programa a exclusión mútua:
++ Para _pausar o proceso_ emprega variables de condición $\rightarrow$ wait e signal
++ Para _evitar ter máis dun proceso activo_ ao mesmo tempo hai varias solucións (como facer que a última función do monitor sexa un signal)
+
+### Transmisión de mensaxes
+É un **método de comunicación entre procesos** que emprega dúas chamadas ao sistema, `send` e `receive` polo que se poden colocar facilmente en procedementos de biblioteca:
++ `send(destino, &mensaxe);`
++ `receive(orixe, &mensaxe);`
+Ao igual que se explicou en Redes, se o receptor non recibiu ningún _ack_ dentro do timeout, volve a mandar o mensaxe, que ten un _número de secuencia_ asociado para que non se perda información.
+
+As mensaxes se poden **direccionar** de varias fromas:
++ **Buzón**: é un lugar onde _se colocan no buffer certo número de mensaxes_, polo que actúan como intermediarios mentres se aceptan ou non as mensaxes no destino.
++ **Encontro**: consiste en _eliminar todo uso do buffer_ e facer que o emisor se bloqueee se a operación `send` remata antes que a `receive`
+#### Problema do productor-consumidor con transmisión de mensaxes
+O consumidor envía N mensaxes baleiras ao productor. Cada vez que o productor produce un item, recibe unha mensaxe baleira e envía unha chea de volta, polo que sempre hai N mensaxes circulando. 
+
+### Barreiras
+É un **mecanismo de sincronización** destinado aos **grupos de procesos** para que _ningún proceso poida continuar á seguinte fase ata que todos estén listos_ para facelo. Para esto, se coloca unha barreira ao final de cada fase, de forma que _cando un proceso chega á barreira, se bloquea_ ata que tódolos procesos chegaron.
+![[barreiras.png | center | 500]]
+## Problemas de comunicación entre procesos
+### O problema dos filósofos comelones
+Tal e como o propuxo Dijkstra en 1965, dicía así: 
+> Cinco filósofos se atopan sentados arredor dunha mesa circular. Estes filósofos só comen e pensan, e cada un ten un plato de espaguetis. Cada filósofo necesita dous tenedores para comer os espaguetis, pero entre cada par de pratos só hai un tenedor.
+![[filosofos.png | center | 200]]
+De esta forma, cando un filósofo ten fame, intenta coller os tenedores esquerdo e dereito, un de cada vez, en calquera orde. Se ten éxito, come por un momento, deixa os tenedores e segue pensando.
+
+Unha posible solución sería a seguinte:
+```c
+#define N 5 // Número de filósofos
+void filosofo(int i) {
+	while(TRUE){
+		pensar();
+		tomar_tenedor(i);
+		tomar_tenedor((i+1) % N);
+		comer(); // yum yum espaguetti
+		poner_tenedor(i);
+		poner_tenedor((i+1) % N);
+	}
+}
+```
+Pero, se todos colleen un só tenedor, ningún podería comer xa que ningún podería adquirir nunca dous tenedores, polo que se produciría un _interbloqueo_ (inanición).
+
+Unha _solución correcta_ sería:
+```c
+#define N 5
+#define IZQ (i-1)%N
+#define DER (i+1)%N
+#define PENS 0 // Pensando
+#define FAME 1
+#define COM 2 // Comendo
+typedef int semaforo;
+int estado[N]; // Array do estado dos filósofos
+semaforo mutex = 1;
+semaforo s[N]; // Array de semaforos dos filosofos
+
+void filosofo(int i) {
+	while(TRUE){
+		pensar();
+		tomar_tenedores(i);
+		comer();
+		poner_tenedores(i);
+	}
+}
+
+void tomar_tenedores(int i) {
+	down(&mutex);
+	estado[i] = FAME; // Indica que ten intencion de collelos tenedores
+	probar(i); // Intenta collelos tenedores
+	up(&mutex);
+	down(&s[i]);
+}
+
+void poner_tenedores(i) {
+	down(&mutex);
+	estado[i] = PENS; // Indica que deixou de comer
+	probar(IZQ); // Mira se o filosofo esquerdo pode comer
+	probar(DER); // Mira se o filosofo dereito pode comer
+	up(&mutex);
+}
+
+void probar(i) {
+	if (estado[i] == FAME && estado[IZQ] != COM && estado[DER] != COM){
+		estado[i] = COM;
+		up(&s[i]);
+	}
+}
+```
+De esta forma, un filósofo só pode empezar a comer se ningún vecino está comendo.
+### O problema dos lectores e escritores
+Trata sobre o acceso a unha **base de datos**. _Varios procesos poden ler_ á vez da BD, pero _só un pode actualizala_, de froma que ata que non remate, ningún outro proceso pode acceder a ela.
+Para programar os lectores e escritores da base de datos, unha **posible solución** é a seguinte: o _primer lector_ en obter acceso á BD, faille un _down ao semáforo_ `bd`; os _seguintes lectores incrementan  e decrementan un contador_ (`cl`) según van chegando e saindo; e o _último en saír_, faille un _up ao semáforo_ de forma que, se hai un _escritor bloqueado, este poida acceder_.
+```c
+typedef int semaforo;
+semaforo mutex=1; // Mutex para cl
+semaforo bd=1; // Semaforo de acceso a BD
+int cl=0; // Contador de lectores
+void lector(void) {
+	while(TRUE){
+		down(&mutex);
+		cl = cl + 1;
+		if (cl == 1) down(&bd); // Se e o primeiro lector fai un down
+		up(&mutex);
+		leer_base_de_datos();
+		down(&mutex);
+		cl = cl – 1;
+		if (cl == 0) up(&bd); // Se e o ultimo lector fai un up
+		up(&mutex);
+		usar_lectura_datos();
+	}
+}
+void escritor(void) {
+	while(TRUE){
+		pensar_datos();
+		down(&bd);
+		escribir_base_de_datos();
+		up(&bd);
+	}
+}
+```
+Non obstante, esto ocasiona un **problema**, xa que mentres haxa un lector activo, os seguintes lectores serán admitidos, aínda que haxa un escritor esperando. Esto pode causar que, se hai un suministro contínuo de lectores, _o escritor nunca poderá acceder á base de datos_. Para **solucionar** este problema, podemos facer que _cando chega un lector, se hai un escritor en espera, o primeiro suspéndese_ detrás do escritor. De esta forma, _un escritor non terá que esperar polos lectores que cheguen despois de el_.
+
+
+
+
+
+
+
+
 
 
 
