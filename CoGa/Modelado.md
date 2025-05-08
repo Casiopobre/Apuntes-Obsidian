@@ -102,6 +102,8 @@ Cando se chama a unha lista, debuxarase a figura xa especficada (e xa compilada)
 ### Formas básicas en GLUT (GL Utility Toolkit)
 ![[formas_basicas_glut.png| center | 350]]
 
+<div style="page-break-after: always;"></div>
+
 ## Modelado en OpenGL 3.3 (GLFW/glad)
 ![[Pasted image 20250305185105.png | center | 500]]
 ### Tipos de shaders
@@ -109,7 +111,7 @@ Cando se chama a unha lista, debuxarase a figura xa especficada (e xa compilada)
 	+ É unha función que _recibe vértices_ como parámetros e _devolve a súa posición_ como saída.
 	+ Manipula vértices en 3D; cor, coordenadas de textura, orientación e tamaño dos vértices.
 + **Fragment shader**:
-	+ Recibe a _información_ de cada _fragmento_ (toda a información necesaria para debuxar un píxel) e devolve a _cor de cada píxel_.
+	+  Recibe a _información_ de cada _fragmento_ (toda a información necesaria para debuxar un píxel) e devolve a _cor de cada píxel_.
 	+ Aplícase na última etapa de rasterizado.
 _Despois_ do fragment shader realízanse unha serie de _comprobacións_ relativas ao Alpha test (transparencias), Blending test e Depth test (profundidade).
 ### Envío de vértices
@@ -154,6 +156,8 @@ glBindVertexArray(0);
 + `stride` $\to$ espacio total que ocupa cada vértice no array (neste caso 3 floats, se lle metemos color, serían 6 floats: 3 para o vertice e 3 para a cor)
 + `pointer` $\to$ (offset) posición inicial dos datos (se tivesemos cor, sería de 3 floats, xa que a cor comeza despois dos3 primeiros floats)
 
+<div style="page-break-after: always;"></div>
+
 ### Xestión de vértices
 Despois de mandar os vértices ao pipe, xestiónanse mediante os **shaders**.
 Os shaders están escritos nunha _linguaxe_ parecida a C chamada _GLSL_, dirixida a manipular vectores e matrices. Usualmente teñen esta **estrutura**:
@@ -180,9 +184,83 @@ Primeiro o **vertex shader** nos devolve a _posición_ dos vértices, e que se a
 ```c
 #version 330 core
 layout (location = 0) in vec3 aPos; // Input = vector (x,y,z) --> aPos
+out vec4 vertexColor; // Output
 void main() {
-	gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);
+	gl_Position = vec4(aPos, 1.0);
+    vertexColor = vec4(0.5, 0.0, 0.0, 1.0); // Unha cor calquera
 }
 ```
 
-Despois o **fragment shader** encárgase de calcular a cor de cada pixel
+Despois o **fragment shader** encárgase de calcular a _cor_ de cada pixel:
+```c
+#version 330 core
+in vec4 vertexColor; // the input variable from the vertex shader
+out vec4 FragColor;
+void main() {
+    FragColor = vertexColor;
+} 
+```
+
+Así, para que o vertex shader e o fragment shader se _comuniquen_ entre si, as variables que outputee o vertex shader deben ser declaradas _exactamente igual_ no fragment shader (mesmos tipo e nome).
+#### Atributos do vertex shader
+Se queremos declarar **máis atributos para cada vértice**, debemos especificarllo ao vertex shader para que sepa como coller os datos.
+Así, se por exemplo temos dous atributos, posición e cor, o noso array de vértices podería ser:
+```c
+float vertices[] = {
+    // positions         // colors
+     0.5f, -0.5f, 0.0f,  1.0f, 0.0f, 0.0f,   // bottom right
+    -0.5f, -0.5f, 0.0f,  0.0f, 1.0f, 0.0f,   // bottom left
+     0.0f,  0.5f, 0.0f,  0.0f, 0.0f, 1.0f    // top 
+};    
+```
+
+Entón no **vertex shader** temos que engadir o _novo atributo_:
+```c
+#version 330 core
+layout (location = 0) in vec3 aPos;
+layout (location = 1) in vec3 aColor; // <-----
+  
+out vec3 ourColor; // output a color to the fragment shader
+
+void main() {
+    gl_Position = vec4(aPos, 1.0);
+    ourColor = aColor; 
+}    
+```
+
+E no **fragment shader**, como lle pasamos a cor, podemos empregala para colorear os vértices:
+```c
+#version 330 core
+out vec4 FragColor;  
+in vec3 ourColor;
+  
+void main() {
+    FragColor = vec4(ourColor, 1.0);
+}
+```
+
+Ademáis, como engadimos outro atributo aos vértices, temos que reconfigurar os `VertexAttribPointer`, xa que agora nos VBO hai a seguinte información:
+![[vertexShaderAttrib.png | center | 350]]
+Polo tanto, nos quedaría:
+```c
+// position attribute
+glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
+glEnableVertexAttribArray(0);
+// color attribute
+glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3* sizeof(float)));
+glEnableVertexAttribArray(1);
+```
+
+Así obteríamos a seguinte imaxe:
+![[exemploOutput.png| center | 250]]
+### Como se meten os shaders no programa?
+Primeiro **envíanse** e **compílanse** os shades:
+1. `glCreateShader()` $\rightarrow$ _crea_ un obxeto _shader_ do tipo corresponednte baleiro
+2. `glShaderSource(shader, fonteGLSL)` $\rightarrow$ _méteselle_ o texto do shader (codigo) no obxeto
+3. `glCompileShader(shader)` $\rightarrow$ o driver da GPU lee o código e o _compila_
+
+Despois de compilar ambos shaders:
+1. `glCreateProgram()` $\rightarrow$ _crea_ un obxeto _program_ para conter os shaders
+2. `glAttachShader(program, tipoShader)` $\rightarrow$ _adxunta_ os shaders compilados ao program
+3. `glLinkProgram(program)` $\rightarrow$ linkea o programa
+4. `glUseProgram(program)` $\rightarrow$ activa o programa para que OpenGL o empregue

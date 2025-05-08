@@ -8,15 +8,14 @@
         "type": "tabs",
         "children": [
           {
-            "id": "f1bf0c2e7ccb535f",
+            "id": "bf566756c0f8653e",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
                 "file": "SOII/Tema2.md",
                 "mode": "preview",
-                "source": false,
-                "backlinks": false
+                "source": false
               },
               "icon": "lucide-file",
               "title": "Tema2"
@@ -79,8 +78,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 200,
-    "collapsed": true
+    "width": 200
   },
   "right": {
     "id": "7d25637a7703bb37",
@@ -179,33 +177,40 @@
       "obsidian-git:Open Git source control": false
     }
   },
-  "active": "f1bf0c2e7ccb535f",
+  "active": "bf566756c0f8653e",
   "lastOpenFiles": [
-    "SOII/Imaxes/interbloqueoRedes.png",
-    "SOII/Tema2.md",
-    "SOII/Imaxes/ordenacionRecursos.png",
-    "SOII/Imaxes/Pasted image 20250503164343.png",
-    "SOII/Imaxes/algoritmoBanqueiroVariosRecursos.png",
-    "SOII/Imaxes/exemploBanqueroUnRecurso.png",
-    "SOII/Imaxes/exemploEstadosSeguros2.png",
-    "SOII/Imaxes/estadoSeguroExemplo1.png",
-    "SOII/ver exame 2022.md",
     "SOII/Tema1.md",
+    "CoGa/Tema6.md",
+    "CoGa/Modelado.md",
+    "CoGa/Imaxes/pipeShaders.png",
+    "CoGa/Imaxes/exemploOutput.png",
+    "CoGa/Imaxes/vertexShaderAttrib.png",
+    "CoGa/LearnOpenGL.md",
+    "CoGa/Introducción.md",
+    "CoGa/Imaxes/EsquemaOperacionsFixas.png",
+    "CoGa/ExemplosOpenGL.md",
+    "SOII/Tema3.md",
+    "BDII/Tema2.md",
+    "BDII/Tema3.md",
+    "BDII/Tema5.md",
+    "BDII/Tema1.md",
+    "SOII/Tema4.md",
+    "SOII/Imaxes/exemploSTR.png",
+    "SOII/Imaxes/algoritmosSTR2.png",
+    "SOII/Imaxes/algoritmosSTR1.png",
+    "SOII/Imaxes/exemploSisPlanificable.png",
+    "SOII/Tema5.Shell.md",
+    "SOII/ver exame 2022.md",
+    "SOII/Tema2.md",
+    "SOII/Imaxes/interbloqueoRedes.png",
+    "SOII/Imaxes/ordenacionRecursos.png",
     "SOII/Exames.md",
-    "SOII/Imaxes/ex4Ex2022.png",
-    "SOII/Imaxes/Pasted image 20250502193219.png",
-    "SOII/Imaxes/Pasted image 20250502193125.png",
     "SOII/InformesSOII/SOII_Informe1.pdf",
     "SOII/InformesSOII/SOII_Informe2.pdf",
     "SOII/InformesSOII/SOII_Informe4.pdf",
     "SOII/InformesSOII/SOII_Informe5.pdf",
     "SOII/InformesSOII/SOII_InformePractica3.pdf",
     "SOII/Tema1Isma/Comunicación y sincronización entre procesos e hilos.md",
-    "CoGa/Modelado.md",
-    "CoGa/LearnOpenGL.md",
-    "CoGa/Introducción.md",
-    "CoGa/ExemplosOpenGL.md",
-    "CoGa/Tema6.md",
     "SOII/InformesSOII/SOII_Informe3.pdf",
     "SOII/InformesSOII",
     "I.md",
@@ -213,19 +218,12 @@
     "SOII/Tanembaum/Tema2.ProcesosFios.md",
     "SOII/Tema1Isma/Imagenes",
     "SOII/Tema1Isma",
-    "BDII/Tema3.md",
-    "BDII/Tema1.md",
-    "BDII/Tema2.md",
     "ProgramacionII/Tema5.md",
     "ProgramacionII/Exercicios.md",
-    "BDII/Tema5.md",
     "ArCo/Tema3.md",
     "ArCo/Tema 1.md",
-    "SOII/Tema5.Shell.md",
     "ProgramacionII/Exemplos.md",
     "ProgramacionII/Imaxes",
-    "ArCo/Introdución.md",
-    "Untitled.canvas",
-    "ArCo/AnexosFuComp.md"
+    "Untitled.canvas"
   ]
 }

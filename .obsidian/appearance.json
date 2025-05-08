@@ -2,7 +2,8 @@
   "cssTheme": "Catppuccin",
   "textFontFamily": "Liberation Serif",
   "enabledCssSnippets": [
-    "Image_Align"
+    "Image_Align",
+    "page-breaks"
   ],
   "theme": "obsidian",
   "baseFontSize": 16

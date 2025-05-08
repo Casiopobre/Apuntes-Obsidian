@@ -21,7 +21,7 @@ Soluciona a superposición de obxetos
 ---
 
 > Os shaders son un obxeto de OpenGL, que se atopan en memoria, polo que só podemos acceder a eles por referencia. De feito, tódolos obxetos de OpenGL son accedidos por referencia. Os shaders son funcións que se executan na GPU e se comunican co resto do programa mediante os inputs/outputs.
-![[image.png | center]]
+![[vertexShaderAttrib.png| center]]
 
 ### Going 3D
 ![[matricesTransformacion.png]]
