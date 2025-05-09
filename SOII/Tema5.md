@@ -96,6 +96,8 @@ $> ls $pipe more
 **Por que `ls | more` funciona e `ls $pipe more` non?**
 Porque ao declarar `|` como unha variable, a shell interpreta o pipe como unha cadea de texto, xa que cree que `|` e `more` son args para `ls`. Poderíamos facer: `eval "ls $pipe more"`
 
+<div style="page-break-after: always;"></div>
+
 ## Programación de scripts en shell
 Un **script** é un _ficheiro_ de texto que contén unha _secuencia de comandos_ que se executan secuencialmente.
 Un script _comeza_ sempre polo **shebang** (`#!`), que lle indica o _intérprete de comandos que empregar_ polo script. Por exemplo `#!/bin/bash` indica que se execute meidante bash
@@ -123,6 +125,9 @@ Para **comparar valores** podemos empregar `[ expresion ]` ou `test expresion`, 
 - `n1 -eq n2`, `n1 -gt n2`, … : Compara _números enteiros_
 - `S1 = S2`, `S1 != S2`: Compara/verifica _cadeas de texto_
 \*Ollo! Se empregamos **`[ ]`**, debe haber un **espacio** despois de `[` e antes de `]`
+
+<div style="page-break-after: always;"></div>
+
 ##### Operadores lóxicos:
 + `!`: NOT
 + `-a`: AND
@@ -205,6 +210,8 @@ do
 	echo "$BUFFER" >> $2 # Garda as liñas que le no segundo arg
 done < $1 # O ficheiro de entrada é o primeiro arg
 ```
+
+<div style="page-break-after: always;"></div>
 
 ### Funcións
 Podemos organizar o código en **funcións** da seguinte forma:

@@ -8,17 +8,17 @@
         "type": "tabs",
         "children": [
           {
-            "id": "bf566756c0f8653e",
+            "id": "24d8dbc626a14330",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "SOII/Tema2.md",
-                "mode": "preview",
+                "file": "CoGa/Iluminacion.md",
+                "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Tema2"
+              "title": "Iluminacion"
             }
           }
         ]
@@ -78,7 +78,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 200
+    "width": 200,
+    "collapsed": true
   },
   "right": {
     "id": "7d25637a7703bb37",
@@ -177,33 +178,35 @@
       "obsidian-git:Open Git source control": false
     }
   },
-  "active": "bf566756c0f8653e",
+  "active": "24d8dbc626a14330",
   "lastOpenFiles": [
+    "CoGa/Imaxes/interploacionCor.png",
+    "CoGa/Iluminacion.md",
+    "CoGa/Imaxes/espectroOlloHumano.png",
+    "CoGa/Camara3D.md",
     "SOII/Tema1.md",
-    "CoGa/Tema6.md",
+    "CoGa/Imaxes/modeloCamaraSintetica.png",
+    "CoGa/Imaxes/Pasted image 20250509154512.png",
+    "CoGa/Imaxes/proxeccionOrtografica.png",
+    "CoGa/Imaxes/camaraLoojAt.png",
+    "CoGa/Imaxes/proxeccionPerspectiva.png",
+    "CoGa/Imaxes/Pasted image 20250509152211.png",
+    "CoGa/Imaxes/clasifProxec.png",
+    "CoGa/Imaxes/tiposProxecccions.png",
+    "SOII/Tema5.md",
+    "SOII/Tema4.md",
+    "SOII/Tema3.md",
+    "SOII/Tema2.md",
     "CoGa/Modelado.md",
-    "CoGa/Imaxes/pipeShaders.png",
-    "CoGa/Imaxes/exemploOutput.png",
-    "CoGa/Imaxes/vertexShaderAttrib.png",
+    "CoGa/Tema6.md",
     "CoGa/LearnOpenGL.md",
     "CoGa/Introducción.md",
-    "CoGa/Imaxes/EsquemaOperacionsFixas.png",
     "CoGa/ExemplosOpenGL.md",
-    "SOII/Tema3.md",
     "BDII/Tema2.md",
     "BDII/Tema3.md",
     "BDII/Tema5.md",
     "BDII/Tema1.md",
-    "SOII/Tema4.md",
-    "SOII/Imaxes/exemploSTR.png",
-    "SOII/Imaxes/algoritmosSTR2.png",
-    "SOII/Imaxes/algoritmosSTR1.png",
-    "SOII/Imaxes/exemploSisPlanificable.png",
-    "SOII/Tema5.Shell.md",
     "SOII/ver exame 2022.md",
-    "SOII/Tema2.md",
-    "SOII/Imaxes/interbloqueoRedes.png",
-    "SOII/Imaxes/ordenacionRecursos.png",
     "SOII/Exames.md",
     "SOII/InformesSOII/SOII_Informe1.pdf",
     "SOII/InformesSOII/SOII_Informe2.pdf",
@@ -221,8 +224,6 @@
     "ProgramacionII/Tema5.md",
     "ProgramacionII/Exercicios.md",
     "ArCo/Tema3.md",
-    "ArCo/Tema 1.md",
-    "ProgramacionII/Exemplos.md",
     "ProgramacionII/Imaxes",
     "Untitled.canvas"
   ]

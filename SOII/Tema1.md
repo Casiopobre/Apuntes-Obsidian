@@ -89,6 +89,8 @@ Consiste en ter unha **variable entera `turno` que leva a conta de a qué proces
 
 > Non é unha boa solución para procesos (é mellor para fíos) xa que un proceso pode quedar bloqueado por outro máis lento (os procesos sempre traballan ao ritmo do mais lento), reducindo a productividade do procesador. Ademáis, **incumple a condición 3**.
 
+<div style="page-break-after: always;"></div>
+
 #### Solución de Peterson
 Consiste en que, cada proceso, antes de entrar á rexión crítica, chama a unha función (`entrar_region`) que fai que **o proceso espere ata que sexa seguro entrar** (while do codigo); e cando quere saír da rexión crítica chama a `salir_region`, que actualiza o array `interesado`, permitindo así que _outro proceso poida accder_.
 
@@ -118,6 +120,8 @@ void salir_region(int proceso) {
 > 2. Proceso 1 chama a `entrar_region` $\rightarrow$ `interesado[otro] = TRUE` $\rightarrow$ quédase esperando no while ata que o outro proceso execute `salir_region` e poña o seu `interesado = FALSE`
 
 > **¿Espera activa?** Sí debido a que o while compróbase continuamente polo proceso que estea esperando
+
+<div style="page-break-after: always;"></div>
 
 #### Instrucción TSL (Hardware)
 É unha **instrucción atómica** que require **axuda do hardware** xa que **bloquea o bus de memoria** mentres se executa. A instrucción é da forma: `TSL REXISTRO, CANDADO`
@@ -152,6 +156,8 @@ MOVE TMP, REG1 
 MOVE REG1, REG2   
 MOVE REG2, TMP
 ```
+
+<div style="page-break-after: always;"></div>
 
 ### Sleep and Wakeup
 As _solucións anteriores_ comproban se un proceso que pide entrar a unha rexión crítica pode facelo, se non pode, quédase esperando. Esto pode ocasionar un **problema de inversión de prioridades**, que ocorre cando un proceso de baixa prioridade mantén un recurso (como un candado), e un proceso de alta prioridade que o necesita non pode continuar porque o proceso de baixa prioridade non pode executarse para liberarlo.
@@ -286,6 +292,9 @@ Ao igual que se explicou en Redes, se o receptor non recibiu ningún _ack_ dentr
 As mensaxes se poden **direccionar** de varias fromas:
 + **Buzón**: é un lugar onde _se colocan no buffer certo número de mensaxes_, polo que actúan como intermediarios mentres se aceptan ou non as mensaxes no destino.
 + **Encontro**: consiste en _eliminar todo uso do buffer_ e facer que o emisor se bloqueee se a operación `send` remata antes que a `receive`
+
+<div style="page-break-after: always;"></div>
+
 #### Problema do productor-consumidor con transmisión de mensaxes
 O consumidor envía N mensaxes baleiras ao productor. Cada vez que o productor produce un item, recibe unha mensaxe baleira e envía unha chea de volta, polo que sempre hai N mensaxes circulando. 
 
@@ -314,6 +323,8 @@ void filosofo(int i) {
 }
 ```
 Pero, se todos colleen un só tenedor, ningún podería comer xa que ningún podería adquirir nunca dous tenedores, polo que se produciría un _interbloqueo_ (inanición).
+
+<div style="page-break-after: always;"></div>
 
 Unha _solución correcta_ sería:
 ```c
@@ -361,6 +372,9 @@ void probar(i) {
 }
 ```
 De esta forma, un filósofo só pode empezar a comer se ningún vecino está comendo.
+
+<div style="page-break-after: always;"></div>
+
 ### O problema dos lectores e escritores
 Trata sobre o acceso a unha **base de datos**. _Varios procesos poden ler_ á vez da BD, pero _só un pode actualizala_, de froma que ata que non remate, ningún outro proceso pode acceder a ela.
 Para programar os lectores e escritores da base de datos, unha **posible solución** é a seguinte: o _primer lector_ en obter acceso á BD, faille un _down ao semáforo_ `bd`; os _seguintes lectores incrementan  e decrementan un contador_ (`cl`) según van chegando e saindo; e o _último en saír_, faille un _up ao semáforo_ de forma que, se hai un _escritor bloqueado, este poida acceder_.

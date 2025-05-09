@@ -36,7 +36,9 @@ Para que ocorra un interbloqueo deben aplicarse todas as condicións seguintes:
 2. **Condición de contención e espera** $\rightarrow$ os procesos que conteñen recursos outorgados previamente, poden _solicitar novos recursos_.
 3. **Condición non apropiativa** $\rightarrow$ _os recursos outorgados_ previamente _non se lle poden quitar a un proceso pola forza_, senon que _deben ser liberados_ de explicitamente polo proceso que os contén.
 4. **Condición de espera circular** $\rightarrow$ debe haber unha _cadea circular_ de dous ou máis _procesos_, cada un _esperando por un recurso contido polo seguinte_ proceso da cadea.
- 
+
+<div style="page-break-after: always;"></div>
+
 ### Modelado de interbloqueos
 Para **representar interbloqueos** gráficamente empréganse **grafos dirixidos** da seguinte forma:
 + Os **nodos** poden ser de dous tipos: _procesos_ (circulos) ou _recursos_ (cadrados)
@@ -46,6 +48,9 @@ Para **representar interbloqueos** gráficamente empréganse **grafos dirixidos*
 
 O sistema operativo _non ten que executar os procesos nunha orde especial_, polo que se ao aoutorgar unha petición específica, se pode producir un interbloqueo, o SO _pode suspender o proceso_ sen outorgar a solicitude ata que sexa seguro. 
 ![[exemploInterbloqueo.png| center | ]]
+
+<div style="page-break-after: always;"></div>
+
 ### Estratexias para lidiar cos interbloqueos
 Hai catro estratexias:
 + Ignorar o problema
@@ -156,6 +161,9 @@ Trátase de **virtualizar os recursos** de forma que _só un proceso teña acces
 Hai varias formas de atacar esta condición:
 + Ter unha regra que diga que **un proceso ten dereito a un só recurso en calquera momento**, polo que _se necesita outro recurso, debe liberar o anterior_.
 + Proporcionar unha **numeración global de tódos os recursos**, de forma que os procesos poidan _solicitar recursos_ sempre que queiran, pero realizando as peticións _en orde numérica_. Así, o grafo de asignación de recursos nunca terá ciclos (nunca se producirá un interbloqueo). ![[ordenacionRecursos.png| center | 300]]
+
+<div style="page-break-after: always;"></div>
+
 ## Outras cuestións
 ### Bloqueo de dúas fases
 En **sistemas de Bases de Datos**, o bloqueo de dúas fases (visto en BDII) consiste en:

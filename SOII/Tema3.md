@@ -18,6 +18,8 @@ $$
 > Se temos un STR con 3 eventos con periodos de 100, 200 e 500 ms respec. e que requiren 50, 30 e 100 ms de tempo de CPU por evento, entón este sistema é planificable, xa que $U \leq 1$
 > ![[exemploSisPlanificable.png| center | 550]]
 
+<div style="page-break-after: always;"></div>
+
 ## Algoritmos de planificación en tempo real
 Os algoritmos de planificación en tempo real poden ser estáticos ou dinámicos. Os **estáticos** toman as súas decisións de planificación _antes_ da execución, polo que só funcionan cando temos dispoñible información de antemán; mentres que os **dinámicos**, o fan durante o _tempo de execución_, polo que non teñen esa restricción.
 ### Programación monotónica de frecuencia (RMS)
@@ -42,6 +44,8 @@ Cada vez que un **proceso ncesita tempo de CPU**, anuncia a súa presencia e seu
 > Supoñendo o exemplo de antes:
 > ![[algoritmosSTR1.png| center | 550]]
 > EDF ten o mesmo comprotamento que RMS ata chegar a t=90. Nese momento, tanto A como B teñen o mesmo tempo de espera (120ms), polo que EDF segue executando B en vez de cambiar a A.
+
+<div style="page-break-after: always;"></div>
 
 Aínda así, é importante denotar que **RMS e EDF non sempre dan os mesmos resultados**.
 > [!Exemplo]
