@@ -214,7 +214,7 @@ glActiveTexture(GL_TEXTURE1);
 glBindTexture(GL_TEXTURE_2D, texture2);
 ```
 
-<div style="page-break-after: always;"></div>
+			<div style="page-break-after: always;"></div>
 
 ## Transparencia Alpha
 OpenGL pode **simular obxectos transparentes**. A forma máis sinxela de facer unha transparencia é mediante a _técnica da porta ou fiestra transparente_.
