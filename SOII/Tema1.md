@@ -7,11 +7,14 @@ A comunicación entre procesos **emprégase para**:
 + Garantir unha _orde correcta_ (sincronización mediante dependencias).
 Os dous últimos puntos pódense tratar coas mesmas ferramentas tanto para procesos como para fíos; pero o primeiro punto é moito máis sinxelo para _fíos_, xa que estes _comparten espazo de direccións_ (os procesos non comparten memoria excepto no caso dun espazo virtual ou mediante o envío de mensaxes).
 >[! Exemplo] Exemplo: Pipe
-Ao executar "comando1 | comando2", o pipe colle a saída do primeiro proceso e a garda nun ficheiro temporal; e comeza a execución do segundo proceso, que tomará o contido do ficheiro temporal (saida de comando1) como entrada. A este ficheiro só pode acceder un proceso á vez, polo que para os sistemas de **multiprogramación**, existe a opción de marcar **puntos de referencia** para que se intercalen e o lean pseudoparalelamente.
+Ao executar "comando1 | comando2", o pipe colle a saída do primeiro proceso e a garda nun ficheiro temporal; despois comeza a execución do segundo proceso, que tomará o contido do ficheiro temporal (saida de comando1) como entrada. A este ficheiro só pode acceder un proceso á vez, polo que para os sistemas de **multiprogramación**, existe a opción de marcar **puntos de referencia** para que se intercalen e o lean pseudoparalelamente.
 
 **Principal inconvinte**: os sistemas son _multiprogramados_, polo que hai varios fíos e procesos simultáneos, polo que poden interferir.
 ### Condicións de carreira
-Os procesos que traballan en conxunto poden **compartir un espazo de almacenamento** no que poden ler e escribir datos, e que pode estar na _memoria principal_ ou pode ser un _arquivo compartido_. Como consecuencia desto, pódense producir **condicións de carrera**, que son situacións nas que dous ou máis procesos _acceden simultáneamente a datos compartidos_ sen nungún orde específico, o que pode xerar resultados inesperados. Esto fai que _depurar_ programas con condicións de carrera sexa _complexo_.
+Os procesos que traballan en conxunto poden **compartir un espazo de almacenamento** no que poden ler e escribir datos, e que pode estar na _memoria principal_ ou pode ser un _arquivo compartido_. Como consecuencia desto, pódense producir **condicións de carrera**, que son situacións nas que dous ou máis procesos _acceden simultáneamente a datos compartidos_ sen ningunha orde específica, o que pode xerar resultados inesperados. Esto fai que _depurar_ programas con condicións de carrera sexa _complexo_.
+
+<div style="page-break-after: always;"></div>
+
 > [!Exemplo: Spooler de Impresión]
 > Cando un proceso quere imprimir un arquivo, introduce o seu nome nun **directorio de spooler**. Entón, o **demonio de impresión** (outro proceso) comproba periódicamente se  hai arquivos que imprimir, e se os hai, os imprime e elimina os seus nomes do directorio.
 > Imaxina que temos un directorio spooler con _moitas ranuras_ que poden conter o nome dun arquivo, e que hai dúas _variables compartidas_: `sal`, que apunta ao _seguinte arquivo_ a imprimir, y `ent`, que apunta á _seguinte ranura libre_.
@@ -27,6 +30,8 @@ Os procesos que traballan en conxunto poden **compartir un espazo de almacenamen
 > ~ **Resultado**: o nome do arquivo que escribiu o proceso B perdeuse e, polo tanto, nunca se imprimirá. ~
 
 Para tratar problemas de carreiras críticas hai que ter sempre presente a **Lei de Murphy**, que di que _se algo pode saír mal, entón sairá mal_.
+
+<div style="page-break-after: always;"></div>
 
 > [!Outro exemplo de condición de carreira]
 > (Este é das diapos de ffrivera, non aparece no Tanembaum)
@@ -53,29 +58,32 @@ Para tratar problemas de carreiras críticas hai que ter sempre presente a **Lei
 
 ### Rexións críticas
 A **rexión crítica** é a parte do programa na que se _accede á memoria compartida_. 
-Para **evitar as condicións de carreira**, necesitamos **exclusión mútua**, que asegura que, se un proceso está empregando una variable ou arquivo compartido, _os demáis procesos non poden acceder_ a esa variable ou arquivo.
+Para **evitar as condicións de carreira**, necesitamos **exclusión mutua**, que asegure que, se un proceso está empregando unha variable ou arquivo compartido, _os demáis procesos non poidan acceder_ a esa variable ou arquivo.
 **Condicións para unha boa solución**:
-1. Non pode haber dous procesos na mesma rexión crítica simultáneamente
-2. Non podemos facer suposicións sobre as velocidades ou o número de CPUs
-3. Ningún proceso que se execute fora da sua rexion critica pode bloqeuar outros procesos
-4. Ningún proceso ten que esperar de maneira indefinida para entrar á súa rexión crítica 
-**Comportamento abstracto da exclusión mútua**:
+1. Non pode haber _dous procesos_ na _mesma rexión crítica_ simultáneamente
+2. Non podemos facer _suposicións_ sobre as _velocidades ou o número de CPUs_
+3. Ningún _proceso_ que se execute _fóra da sua rexion critica_ pode _bloquear outros procesos_
+4. Ningún _proceso_ ten que _esperar de maneira indefinida_ para entrar á súa rexión crítica 
+
+<div style="page-break-after: always;"></div>
+
+**Comportamento abstracto da exclusión mutua**:
 ![[CompAbstractoExMutua.png| center | 450]]
 
-### Exclusión mútua con espera ocupada
-A **espera ocupada** ou espera active consiste na acción de _avaliar de forma continua unha variable_ esperando certo valor e, polo xeral, debe evitarse debido a que desperdicia tempo de CPU.
-Para lograr a exclusión mútua con espera ocupada hai varios métodos.
+### Exclusión mutua con espera ocupada
+A **espera ocupada** ou espera activa consiste na acción de _comprobar de forma continua unha variable_ esperando certo valor e, polo xeral, debe _evitarse_ debido a que desperdicia tempo de CPU.
+Para lograr a exclusión mutua con espera ocupada hai varios métodos:
 #### Deshabilitando interrupcións
-Consiste en que cada proceso **deshabilite as interrupcións xusto antes de entrar á súa rexión crítica** e as rehabilite despois, evitando así que ocorran interrupcións de reloxo. Esto causa que _non se poida expropiar a un proceso_, xa que non hai cambios de contexto. Aínda que o _kernel o fai con frecuencia_, é _perigoso en procesos de usuario_, e resulta _inútil en sistemas multicore_.
-> É unha técnica útil dentro do mesmo SO, pero non é apropiada como mecanismo de exclusión mútua xeral para os procesos de usuario.
+Consiste en que cada proceso **deshabilite as interrupcións xusto antes de entrar á súa rexión crítica** e as rehabilite despois, evitando así que ocorran interrupcións de reloxo. Esto causa que _non se poida expropiar a un proceso_, xa que _non hai cambios de contexto_. Aínda que o _kernel o fai con frecuencia_, é _perigoso en procesos de usuario_, e resulta _inútil en sistemas multicore_.
+> É unha técnica útil dentro do mesmo SO, pero non é apropiada como mecanismo de exclusión mutua xeral para os procesos de usuario.
 #### Variables de candado
 Consiste en ter unha **variable compartida** que ao principio vale 0 e que ten que ser **avaliada por cada proceso que queira entrar á rexión crítica**: se é 0, pona a 1 e entra, e se é 1, espera a que sexa 0.
 Polo tanto:
-+ Candado = 0 $\rightarrow$ ningún proceso na súa rexión crítica
-+ Candado = 1 $\rightarrow$ algún proceso na súa rexión crítica
++ Candado = 0 $\rightarrow$ _ningún proceso_ na súa rexión crítica
++ Candado = 1 $\rightarrow$ _algún proceso_ na súa rexión crítica
 > Non funciona. \*_Candado de xiro_: candado que emprega a espera ocupada.
 #### Alternancia estricta
-Consiste en ter unha **variable entera `turno` que leva a conta de a qué proceso lle toca acceder á rexión crítica**. Cada proceso _avalía se `turno` vale un número concreto_ (0, 1, ...) e se é así, significa que pode entrar á rexión crítica. Despois, cando vai saír da rexión crítica, _actualiza turno_ para que outro proceso poida acceder a ela.
+Consiste en ter unha **variable enteira `turno` que leva a conta de a qué proceso lle toca acceder á rexión crítica**. Cada proceso _avalía se `turno` vale un número concreto_ (0, 1, ...) e se é así, significa que pode entrar á rexión crítica. Despois, cando vai saír da rexión crítica, _actualiza turno_ para que outro proceso poida acceder a ela.
 > [!Exemplo]
 > Exemplo con 2 procesos:
 > ```c
@@ -87,14 +95,12 @@ Consiste en ter unha **variable entera `turno` que leva a conta de a qué proces
 > }                                   }
 > ```
 
-> Non é unha boa solución para procesos (é mellor para fíos) xa que un proceso pode quedar bloqueado por outro máis lento (os procesos sempre traballan ao ritmo do mais lento), reducindo a productividade do procesador. Ademáis, **incumple a condición 3**.
-
-<div style="page-break-after: always;"></div>
+> Non é unha boa solución para procesos (é mellor para fíos) xa que un proceso pode quedar bloqueado por outro máis lento (os procesos sempre traballan ao ritmo do mais lento), reducindo a productividade do procesador. Ademáis, **incumpre a condición 3**.
 
 #### Solución de Peterson
-Consiste en que, cada proceso, antes de entrar á rexión crítica, chama a unha función (`entrar_region`) que fai que **o proceso espere ata que sexa seguro entrar** (while do codigo); e cando quere saír da rexión crítica chama a `salir_region`, que actualiza o array `interesado`, permitindo así que _outro proceso poida accder_.
+Consiste en que, cada proceso, antes de entrar á rexión crítica, chame a unha función (`entrar_region`) que fai que **o proceso espere ata que sexa seguro entrar** (while do codigo de abaixo); e cando quere saír da rexión crítica chama a `salir_region`, que actualiza o array `interesado[]`, permitindo así que _outro proceso poida accder_.
 
-Solución de Peterson para 2 procesos:
+**Solución de Peterson para 2 procesos**:
 ```c
 #define FALSE 0
 #define TRUE 1
@@ -115,21 +121,23 @@ void salir_region(int proceso) {
 	interesado[proceso] = FALSE;
 }
 ```
+
+<div style="page-break-after: always;"></div>
+
 > [!Exemplo de execución]
 > 1. Proceso 0 chama a `entrar_region` $\rightarrow$ `interesado[otro] = FALSE` $\rightarrow$ returnea inmediatamente (non se cumple o `&&` do while)
 > 2. Proceso 1 chama a `entrar_region` $\rightarrow$ `interesado[otro] = TRUE` $\rightarrow$ quédase esperando no while ata que o outro proceso execute `salir_region` e poña o seu `interesado = FALSE`
 
 > **¿Espera activa?** Sí debido a que o while compróbase continuamente polo proceso que estea esperando
 
-<div style="page-break-after: always;"></div>
-
 #### Instrucción TSL (Hardware)
-É unha **instrucción atómica** que require **axuda do hardware** xa que **bloquea o bus de memoria** mentres se executa. A instrucción é da forma: `TSL REXISTRO, CANDADO`
-**Que fai?** Le o contido de `CANDADO` e o garda no rexistro `REXISTRO`, para despois almacenar un valor (distinto de 0) en `CANDADO`. Esto faino de forma **átomica** e indivisible gracias a que a CPU bloqeuea o bus de memoria mentres tanto.
+É unha **instrucción atómica** que require **axuda do hardware** xa que **bloquea o bus de memoria** mentres se executa. A instrucción é da _forma_: `TSL REXISTRO, CANDADO`
+
+**Que fai?** _Le_ o contido de `CANDADO` e o _garda_ no rexistro `REXISTRO`, para despois _almacenar un valor_ (distinto de 0) en `CANDADO`. Esto faino **atómicamente** gracias a que a _CPU bloquea o bus de memoria_ mentres tanto.
 > _Bloquear o bus de memoria != Deshabilitar as interrupcións_
 > Cando se deshabilitan as interrupcións non se evita que outro procesador acceda á palabra, xa que deshabilitar as interrupcións no procesador 1 non ten ningún efecto no procesador 2. Para que o procesador 2 non interfira a ñunica forma é bloquear o bus (require de hardware).
 
-Para **empregar TSL** necesitamos unha variable compartida `CANDADO` que coordine o acceso ás rexións críticas: cando `CANDADO == 0` $\rightarrow$ calquera proceso pode poñelo a 1 (chamada a TSL) e devolvelo a 0 cando remate (`MOVE` ordinario). 
+Para **empregar TSL** necesitamos unha _variable compartida_ `CANDADO` que coordine o acceso ás rexións críticas: cando `CANDADO == 0` $\rightarrow$ calquera proceso pode poñelo a 1 (chamada a TSL) e devolvelo a 0 cando remate (`MOVE`). 
 
 **Para evitar que dous procesos entren ao mesmo tempo nunha rexión crítica**:
 ```asm
@@ -144,8 +152,10 @@ salir_region:
 	RET ;Volve ao chamador
 ```
 
+<div style="page-break-after: always;"></div>
+
 ##### Instrucción alternativa: XCHG
-A instrucción XCHG **intercambia o contido de dúas ubicacións de forma atómica**, e está imlementada nos procesadores Intel x86, que a empregan para a sincronización a baixo nivel.
+A instrucción XCHG **intercambia o contido de dúas ubicacións de forma atómica**. Está implementada nos procesadores Intel x86, que a empregan para a _sincronización a baixo nivel_.
 Polo tanto, o codigo 1 e o codigo 2 son equivalentes (se o 2 se executara de forma atómica):
 ```asm
 ;Codigo 1
@@ -157,19 +167,19 @@ MOVE REG1, REG2 
 MOVE REG2, TMP
 ```
 
-<div style="page-break-after: always;"></div>
-
 ### Sleep and Wakeup
-As _solucións anteriores_ comproban se un proceso que pide entrar a unha rexión crítica pode facelo, se non pode, quédase esperando. Esto pode ocasionar un **problema de inversión de prioridades**, que ocorre cando un proceso de baixa prioridade mantén un recurso (como un candado), e un proceso de alta prioridade que o necesita non pode continuar porque o proceso de baixa prioridade non pode executarse para liberarlo.
+As _solucións anteriores_ comproban se un proceso que pide entrar a unha rexión crítica pode facelo, se non pode, quédase esperando. Esto pode ocasionar un **problema de inversión de prioridades**, que ocorre cando un proceso de _baixa prioridade_ mantén un recurso (como un candado), e un proceso de _alta prioridade_ que o necesita non pode continuar porque o proceso de baixa prioridade non pode executarse para liberarlo.
 
 Para _evitar as esperas activas_ que poden dar lugar a problemas de inversión de prioridades, pódense empregar as **chamadas ao sistema `sleep`**, que fai que o sistema se bloquee ou desactive ata que outro programa a active, e **`wakeup`**, que desperta ao proceso pasado como parámetro. _Para asociar ambas chamadas, emprégase unha dirección de memoria_ (zona de memoria compartida).
 #### O problema do productor-consumidor
-[[SOII_Informe1.pdf| Mais info no Informe 1 da practica 2 de SOII]]
+[[SOII_Informe1.pdf| _Mais info no Informe 1 da practica 2 de SOII_]]
 O **problema produtor-consumidor (ou buffer limitado)** consiste en **dous procesos** (produtor e consumidor) que comparten un **buffer de tamaño fixo**. Basicamente, o _produtor_ dedícase a _colocar elementos_ no buffer mentres o _consumidor os elimina_. Cando un dos dous _non pode realizar a súa función_ (colocar ou eliminar), _vai durmir_ (cun `sleep`) e agarda a que _o outro proceso o esperte_ (cun ​​`wakeup`). Para _levar a conta dos elementos_ do buffer, ambos procesos comparten a variable `conta`, que é actualizada polos procesos según van introducindo ou eliminando elementos do buffer.
 
-O **problema** ocorre cando a variable `conta` _non se actualiza correctamente_, xa que, ao non ter acceso restrinxido, é susceptible a carreiras críticas, o que acaba provocando tanto o produtor como o consumidor se queden _durmidos para sempre_.
+O **problema** ocorre cando a variable `conta` _non se actualiza correctamente_, xa que, ao non ter acceso restrinxido, é susceptible a _carreiras críticas_, o que acaba provocando tanto o produtor como o consumidor queden durmidos para sempre.
 
-Problema do productor-consumidor cunha condición de carreira crítica:
+<div style="page-break-after: always;"></div>
+
+**Problema do productor-consumidor cunha condición de carreira crítica**:
 ```c
 #define N 100 // Tamaño do buffer
 int cuenta = 0; // Número de elementos que contén o buffer
@@ -196,17 +206,17 @@ void consumidor(void) {
     }
 }
 ```
-\*Para solucionar o problema de perda de sinais, pódese engadir un bit de espera de espertar, que se fixe cando un proceso que esté esperto, reciba un bit de espera a espertar, aínda uqe é unha solución pouco escalable.
+\*Para solucionar o problema de perda de sinais, pódese engadir un _bit de espera de espertar_, que se fixe cando un proceso que esté esperto, reciba un bit de espera a espertar, aínda uqe é unha solución pouco escalable.
 ### Semáforos
 Tal e como os propuxo Dijkstra, un **semáforo** é unha _variable enteira_ que conta o _número de sinais de espertar_ e as almacena para un uso futuro. Ríxese por dúas **operacións atómicas**:
 + **`up`**: _incrementa o valor_ do semáforo. Se hai algún _proceso inactivo_ nese semáforo, que non completara o seu `down`, o sistema selecciona algún proceso inactivo e _lle permite completalo_.
 + **`down`**: se o valor do semáforo é _maior a 0_, o _decrementa_, e se é _0_, _bloquea_ o proceso.
 ####  Resolución do problema do productor-consumidor con semáforos
-[[SOII_Informe2.pdf| Mais info no Informe 2 da practica 2 de SOII]]
-Os semáforos serven para resolver a perda de sinais de despertar. Normalmente, impleméntanse `up` e `down` como **chamadas ao sistema** que _deshabilitan brevemente tódalas interrupcións_ mentres avalía o semáforo, o actualiza e pon o proceso a durmir se fai falta.
+[[SOII_Informe2.pdf| _Mais info no Informe 2 da practica 2 de SOII_]]
+Os semáforos serven para resolver a perda de sinais de espertar. Normalmente, impleméntanse `up` e `down` como **chamadas ao sistema** que _deshabilitan brevemente tódalas interrupcións_ mentres avalían o semáforo, o actualizan e poñen o proceso a durmir se fai falta.
 
-Esta solución emprega **tres semáforos**: un para contabilizar o número de _ranuras cheas_, outro para as _baleiras_, e un chamado _mutex_ para que o productor e o consumidor non accedan ao buffer simultaneamente.  Así, aseguramos a **exclusión mútua** facendo que cada proceso execute un _down antes de entrar_ á rexión crítica, e un _up despois de salir_ da mesma.
-\*A semáforos que se inicializan a 1 e se comportan como o mutex se lles chama semáforo binarios
+Esta solución emprega **tres semáforos**: un para contabilizar o número de _ranuras cheas_, outro para as _baleiras_, e un chamado _mutex_ para que o productor e o consumidor non accedan ao buffer simultaneamente.  Así, aseguramos a **exclusión mutua** facendo que cada proceso execute un _down antes de entrar_ á rexión crítica, e un _up despois de salir_ da mesma.
+\*A semáforos que se inicializan a 1 e se comportan como o mutex se lles chama _semáforos binarios_
 
 Solución:
 ```c
@@ -242,9 +252,9 @@ void consumidor(void) {
 ```
 
 ### Mutexes
-Básicamente son como unha _versión simplificada dos semáforos_ (sen a habilidade de contar), é decir, unha variable que toma valores binarios (0 ou 1). A os mutexes dáselles ben únicamente **administrar a exclusión mútua**, e son eficientes e sinxelos de implementar. Están rexidos por **dúas operacións atómicas**:
-+ **`lock`**: se o mutex está aberto (mutex = 0) $\rightarrow$ a rexión crítica está dispoñible $\rightarrow$ a chamada ten éxito (en caso contrario, o fío bloquéase ata que a rexión crítica estea dispoñible)
-+ **`unlock`**: pon o mutex a 1 $\rightarrow$ desbloquea a rexión crítica 
+Básicamente son como unha _versión simplificada dos semáforos_ (sen a habilidade de contar), é decir, unha variable que toma valores binarios (0 ou 1). Aos mutexes dáselles ben únicamente **administrar a exclusión mutua**, e son eficientes e sinxelos de implementar. Están rexidos por **dúas operacións atómicas**:
++ **`lock`**: se o mutex está aberto (_mutex = 0_) $\rightarrow$ a rexión crítica está dispoñible $\rightarrow$ a chamada ten éxito (en caso contrario, o fío bloquéase ata que a rexión crítica estea dispoñible)
++ **`unlock`**: pon o _mutex a 1_ $\rightarrow$ desbloquea a rexión crítica 
 
 As operacións `lock` e `unlock` pódense implementar facilmente _con instruccións TSL ou XCHG_:
 ```asm
@@ -260,53 +270,56 @@ mutex_unlock:
 	RET                    ; return (volve ao procedemento chamador)
 ```
 > [!Diferencia entre procesos e fíos]
-> Unha **diferencia entre procesos e fíos** é que no caso dos procesos, tarde ou temprano o proceso que mantén o mutex pasa a executarse (gracias o clock) e o libera; mentres que no caso dos fíos __non hai un reloxo que pare os fíos que levan moito tempo executándose__. Por eso no procedemento `mutex_lock`, cando este non pode adquirir un mutex chama a `thread_yield` para ceder a CPU a outro fío, polo que _non hai espera ocupada_ per se (xa que cando o fío se volve a executar, volve a avaliar o mutex). De esta forma, dado que `thread_yield` só é unha chamada ao planificador de fios, as funcións de `mutex_lock` e `mutex_unlock` _non requiren chamadas ao kernel_, o que fai que sexan procedementos _moi rápidos_.
+> Unha **diferencia entre procesos e fíos** é que no caso dos procesos, tarde ou cedo o proceso que mantén o mutex pasa a executarse (gracias o clock) e o libera; mentres que no caso dos fíos __non hai un reloxo que pare os fíos que levan moito tempo executándose__. Por eso no procedemento `mutex_lock`, cando este non pode adquirir un mutex chama a `thread_yield` para ceder a CPU a outro fío, polo que _non hai espera ocupada_ per se (xa que cando o fío se volve a executar, volve a avaliar o mutex). De esta forma, dado que `thread_yield` só é unha chamada ao planificador de fios, as funcións de `mutex_lock` e `mutex_unlock` _non requiren chamadas ao kernel_, o que fai que sexan procedementos _moi rápidos_.
 
 > [!Diferencia entre procesos e fíos]
-> Outra diferencia entre procesos e fíos e que **os fíos comparten un espazo de direccións común mentres que os procesos non**. No caso dos _procesos_, teñen algunhas _estruturas de datos compartidas_ que se poden _almacenar no kernel_ e acceder a elas mediante _syscalls_; ademáis de poder compartir un cacho do seu espazo de direccións con outros procesos (no peor dos casos, tamén se pode empregar un arquivo compartido). Se os procesos compartisen os seusespazos de direccións, a diferencia entre procesos e fíos sería case nula, pero aínda así, dado que o kernel está moi involucrado na administración dos procesos, estes nunca terán a eficiencia dos fíos a nivel de usuario. 
+> Outra diferencia entre procesos e fíos e que **os fíos comparten un espazo de direccións común mentres que os procesos non**. No caso dos _procesos_, teñen algunhas _estruturas de datos compartidas_ que se poden _almacenar no kernel_ e acceder a elas mediante _syscalls_; ademáis de poder compartir un cacho do seu espazo de direccións con outros procesos (no peor dos casos, tamén se pode empregar un arquivo compartido). Se os procesos compartisen os seus espazos de direccións, a diferencia entre procesos e fíos sería case nula, pero aínda así, dado que o kernel está moi involucrado na administración dos procesos, estes nunca terán a eficiencia dos fíos a nivel de usuario.
+
+<div style="page-break-after: always;"></div>
 
 _Chamadas de Pthreads relacionadas con mutexes_:
 ![[pthreadsMutexes.png | center | 360]]
 #### Variables de condición
-As variables de condición son un _mecanismo de sincronización_ que serven para **bloquear threads ata que se cumpla unha condición** determinada, polo que están _asociadas a mutexes_. Permiten que a espera e bloqueo se realicen de forma atómica.
+As variables de condición son un _mecanismo de sincronización_ que serve para **bloquear threads ata que se cumpla unha condición** determinada, polo que están _asociadas a mutexes_. Permiten que a espera e bloqueo se realicen de forma _atómica_.
 _Chamadas a Pthreads relacionadas con variables de condición_:
 ![[Pasted image 20250501153532.png | center | 450]]
 
-Para a **sincronización de fíos**, empréganse tanto _mutexes_ como _variables de condición_ en conxunto da seguinte forma: un _fío pecha un mutex_ e despois _espera a unha variable de condición_ cando non poida obter o que necesita:
-![[sincronizacionFios.png | center | 500]]
+Para a **sincronización de fíos**, empréganse tanto _mutexes_ como _variables de condición_ en conxunto, da seguinte forma: un _fío pecha un mutex_ e despois _espera a unha variable de condición_ cando non poida obter o que necesita.
+![[sincronizacionFios.png | center | 400]]
 
-[[SOII_InformePractica3.pdf | Ver Problema do consumidor resolto con mutexes e variablesde condición.]]
+[[SOII_InformePractica3.pdf | _Ver Problema do productor-consumidor resolto con mutexes e variables de condición. (Practica 3)_]]
 
 ### Monitores
-Un monitor é un **mecanismo de sincronización de alto nivel** que asegura unha _menor probabilidade de erro_ pero é _menos versátil_. Ten unha estrutura similar á de un obxecto na que se definen procedementos, variables e estruturas de datos. 
-Permiten a **exclusión mútua garantizada** gracias a que nun monitor só pode haber un proceso activo en cada instante: o compilador recoñece o monitor e programa a exclusión mútua:
+Un monitor é un **mecanismo de sincronización de alto nivel** que asegura unha _menor probabilidade de erro_ pero é _menos versátil_. Ten unha estrutura similar á de un _obxecto_ na que se definen procedementos, variables e estruturas de datos. 
+Permiten a **exclusión mutua garantizada** gracias a que nun monitor só pode haber _un proceso activo_ en cada instante: o compilador recoñece o monitor e programa a exclusión mutua:
 + Para _pausar o proceso_ emprega variables de condición $\rightarrow$ wait e signal
 + Para _evitar ter máis dun proceso activo_ ao mesmo tempo hai varias solucións (como facer que a última función do monitor sexa un signal)
 
 ### Transmisión de mensaxes
-É un **método de comunicación entre procesos** que emprega dúas chamadas ao sistema, `send` e `receive` polo que se poden colocar facilmente en procedementos de biblioteca:
+É un **método de comunicación entre procesos** que emprega dúas chamadas ao sistema, `send` e `receive` polo que se poden colocar facilmente en procedementos de biblioteca como:
 + `send(destino, &mensaxe);`
 + `receive(orixe, &mensaxe);`
-Ao igual que se explicou en Redes, se o receptor non recibiu ningún _ack_ dentro do timeout, volve a mandar o mensaxe, que ten un _número de secuencia_ asociado para que non se perda información.
+Ao igual que se explicou en Redes, se o receptor non recibiu ningún _ack_ dentro do timeout, volve mandar a mensaxe, que ten un _número de secuencia_ asociado para que non se perda información.
 
 As mensaxes se poden **direccionar** de varias fromas:
-+ **Buzón**: é un lugar onde _se colocan no buffer certo número de mensaxes_, polo que actúan como intermediarios mentres se aceptan ou non as mensaxes no destino.
-+ **Encontro**: consiste en _eliminar todo uso do buffer_ e facer que o emisor se bloqueee se a operación `send` remata antes que a `receive`
-
-<div style="page-break-after: always;"></div>
++ **Buzón**: é un onde _se colocan nun buffer certo número de mensaxes_, polo que actúan como intermediarios mentres se aceptan ou non as mensaxes no destino.
++ **Encontro**: consiste en _eliminar todo uso do buffer_ e facer que o emisor se bloqueee se a operación `send` remata antes que a `receive`.
 
 #### Problema do productor-consumidor con transmisión de mensaxes
 O consumidor envía N mensaxes baleiras ao productor. Cada vez que o productor produce un item, recibe unha mensaxe baleira e envía unha chea de volta, polo que sempre hai N mensaxes circulando. 
-
+\*Ver Práctica 4
 ### Barreiras
-É un **mecanismo de sincronización** destinado aos **grupos de procesos** para que _ningún proceso poida continuar á seguinte fase ata que todos estén listos_ para facelo. Para esto, se coloca unha barreira ao final de cada fase, de forma que _cando un proceso chega á barreira, se bloquea_ ata que tódolos procesos chegaron.
+É un **mecanismo de sincronización** destinado aos **grupos de procesos** para lograr que _ningún proceso poida continuar á seguinte fase ata que todos estén listos_. Para esto, se coloca unha barreira ao final de cada fase, de forma que _cando un proceso chega á barreira, se bloquea_ ata que tódolos procesos cheguen.
 ![[barreiras.png | center | 500]]
+
+<div style="page-break-after: always;"></div>
+
 ## Problemas de comunicación entre procesos
 ### O problema dos filósofos comelones
 Tal e como o propuxo Dijkstra en 1965, dicía así: 
 > Cinco filósofos se atopan sentados arredor dunha mesa circular. Estes filósofos só comen e pensan, e cada un ten un plato de espaguetis. Cada filósofo necesita dous tenedores para comer os espaguetis, pero entre cada par de pratos só hai un tenedor.
 ![[filosofos.png | center | 200]]
-De esta forma, cando un filósofo ten fame, intenta coller os tenedores esquerdo e dereito, un de cada vez, en calquera orde. Se ten éxito, come por un momento, deixa os tenedores e segue pensando.
+Desta forma, cando un filósofo ten fame, intenta coller os tenedores esquerdo e dereito, un de cada vez, en calquera orde. Se ten éxito, come por un momento, deixa os tenedores e segue pensando.
 
 Unha posible solución sería a seguinte:
 ```c
@@ -316,13 +329,13 @@ void filosofo(int i) {
 		pensar();
 		tomar_tenedor(i);
 		tomar_tenedor((i+1) % N);
-		comer(); // yum yum espaguetti
+		comer(); // yum yum espaguetti :)
 		poner_tenedor(i);
 		poner_tenedor((i+1) % N);
 	}
 }
 ```
-Pero, se todos colleen un só tenedor, ningún podería comer xa que ningún podería adquirir nunca dous tenedores, polo que se produciría un _interbloqueo_ (inanición).
+Pero, se todos collen un só tenedor, ningún podería comer xa que ningún podería adquirir nunca dous tenedores, polo que se produciría un _interbloqueo_ (inanición).
 
 <div style="page-break-after: always;"></div>
 

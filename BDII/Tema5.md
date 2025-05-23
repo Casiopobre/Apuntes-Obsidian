@@ -16,6 +16,8 @@ Para poder determinar o medio polo cal o sistema debe recuperarse, debemos inden
 ### Implemenatción do almacenamento estable
 Replícase a información necesaria en **varios medios de almacenamento non volátil** con **modos de fallo independentes** e se *actualiza* de forma controlada. Os sistemas máis seguros realizan unha _copia de seguridade remota_ (copia de cada bloque de almacenamento estable nun lugar remoto a través da rede).
 
+<div style="page-break-after: always;"></div>
+
 As **transferencias** de bloques **entre a memoria e o disco** poden acabar de tres formas:
 + _Éxito_: a información chega ao seu destino sen fallos
 + _Fallo parcial_: chega información incorrecta debido a un fallo no medio de transferencia
@@ -39,6 +41,8 @@ Para **transferir** bloques (B) entre o **disco e memoria principal** emprégans
 + `entrada(B)`:  disco $\rightarrow$ memoria principal
 + `saida(B)`: memoria principal $\rightarrow$ disco
 
+<div style="page-break-after: always;"></div>
+
 Ademáis, cada **transacción** ten unha **área de traballo privada** na que se gardan _copias_ ($x_{i}$) de tódolos elementos de datos da memoria principal ($X$) que emprega, que se crea cando comenza a transacción e se elimina cando remata. Así, cada transacción interatúa coa BD mediante _transferencias de datos entre a súa área privada e a memoria intermedia_, que se realizan mediante as operacións seguintes:
 + `ler(X)`: valor do elemento de datos _da memoria intermedia_ $X$ $\rightarrow$ _variable local_ $x_i$.
 	+ Se o bloque $B_{X}$ no que está o elemento $X$ non se atopa en memoria principal, traeno con `entrada(B_X)`.
@@ -56,6 +60,8 @@ O rexistro histórco é unha **secuencia de rexistros** que almacena todas as *a
 + $V_{1}$ $\rightarrow$ _valor anterior_ do elemento de datos (antes da escritura)
 + $V_{2}$ $\rightarrow$ _valor posterior_ do elemento de datos (despois da escritura)
 Polo tanto, unha actualización represéntase da seguinte maneira: $<T_{i}, X_{j}, V_{1}, V_{2}>$
+
+<div style="page-break-after: always;"></div>
 
 >[!Tipos de rexistro de rexistro histórico]
 > + Rexistro de actualización: $<T_{i}, X_{j}, V_{1}, V_{2}>$
@@ -79,6 +85,8 @@ As _actualizacións_ que faga a transacción na súa _área privada non contan c
 + **Modificación diferida**: espérase a que a _transacción estea comprometida_ para gardar os datos no disco. Ten a _sobrecarga_ de que a transacción necesita facer unha copia local de tódolos elementos de datos actualizados.
 \* En ambos casos, mentres non se actualiza o disco, os datos gárdanse en _memoria intermedia_. 
 
+<div style="page-break-after: always;"></div>
+
 Polo tanto, un **algoritmo de recuperación** ten que ter en conta:
 + Que unha transacción pode estar comprmetida aínda que algunhas modificacións _non estean aínda no disco_.
 + Que unha transacción pode ter modificado a base de datos e despois necesite _abortar_.
@@ -93,6 +101,8 @@ Os **algoritmos de recuperación** requiren que, se unha transacción _modifica 
 ### Transacción comprometida
 Unha transacción está comprometida cando **o seu rexistro de rexistro histórico está comprometido**, é decir, se gardou en _almacenamento estable_. Polo tanto, se ocorre un fallo do sistema antes de que o rexistro $<T_{i}$ comprometida $>$ se garde en almacenamento estable, a transacción $T_{i}$ volve atrás.
 
+<div style="page-break-after: always;"></div>
+
 ### Emprego do rexistro histórico para desfacer e refacer transacciones
 **Procedementos de recuperación** $\rightarrow$ empregan o rexistro histórico para atopar qué datos actualiza cada transacción $T_{i}$, e os seus valores anterior e novo:
 + `desfacer(T_i)`: restaura o valor de tódolos _elementos de datos actualizados_ por $T_i$ aos seus **valores anteriores**.
@@ -103,6 +113,8 @@ Unha transacción está comprometida cando **o seu rexistro de rexistro históri
 	+ A operación refacer debe executarse nunha _orde equivalente á orixinal_ para que o elemento de datos non teña un valor erróneo. Por esto, a maioría de algoritmos realizan un _percorrido polo rexistro histórico aplicando a operación refacer a cada rexistro_, de forma que asegura que se mantén a orde.
 
 Así, eventualmente ==toda transacción terá un rexistro compometida ou abortada no rexistro histórico==.
+
+<div style="page-break-after: always;"></div>
 
 **Cando se produce un fallo no sistema**, o esquema de recuperación _consulta o rexistro histórico_ e determina as _transaccións_ que deben _refacerse_ e as que deben _desfacerse_:
 + $T_{1}$ debe **desfacerse** $\rightarrow$ o rexistro histórico contén $<T_{i}$ iniciada $>$ pero _non_ $<T_{i}$ comprometida $>$ ou $<T_{i}$ abortada $>$.
@@ -117,6 +129,8 @@ Así, eventualmente ==toda transacción terá un rexistro compometida ou abortad
 > Cando o sistema volva a funcionar, deberá _desfacer_ $T_{1}$, xa que ten o seu iniciada pero non o seu comprometida ou abortada; e _refacer_ $T_{0}$, xa que ten o seu iniciada e o seu comprometida 
 > **c) Supoñamos que o fallo do sistema ocorre xunto despois de escribir $<T_{1}$ comprometida $>$**
 > Deberán _refacerse_ tanto $T_{0}$ como $T_{1}$, xa que ambas teñen o seu iniciada e comprometida.
+
+<div style="page-break-after: always;"></div>
 
 ### Puntos de revisión
 "Son como checkpoints". Introdúcense para _reducir a sobrecarga_ do proceso de búsqueda, e se realizan da seguinte maneira:
@@ -159,6 +173,8 @@ Así, ao final desta fase, ==a lista-desfacer contén tódalas transaccións inc
 3. Cando a **lista-desfacer está baleira**, remata a fase desfacer, xa que significa que _o sistema atopou rexistros $<T_{i}$ iniciada $>$ para tódalas transaccións da lista-desfacer_.
 A partires de aquí, pode reanudarse o procesamento normal de transaccións.
 
+<div style="page-break-after: always;"></div>
+
 > [!Exemplo] 
  No seguinte rexistro histórico, vemos que $T_0$ retrocedeuse antes do fallo do sistema e que $T_1$ está  comprometida. En este exemplo, vaise _recuperar o valor do elemento de datos B_ durante o retroceso de $T_0$.
  >
@@ -173,6 +189,8 @@ A partires de aquí, pode reanudarse o procesamento normal de transaccións.
 >    6. Atópase $<T_2\ A, 500, 400>$ (rexitstro só-refacer que actualiza A) $\rightarrow$ _recupera o valor anterior_ de A e se escribe o rexistro de só-refacer $<T_2\ A, 500, 400>$ no rexistro histórico
 >    7.  Atópase o rexistro $<T_{2}$ iniciada $>$ $\rightarrow$ engade un rexistro $<T_{2}$ abortada $>$ no rexistro histórico.
 ![[exexmploAlgoritmoRevision.png| center]]
+
+<div style="page-break-after: always;"></div>
 
 ## Fallo con perda de almacenamento non volátil
 ### Volcado de arquivo

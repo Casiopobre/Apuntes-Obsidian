@@ -1,5 +1,4 @@
-Doc# Tema 3. Transaccións
-[MathJax Quick Reference](https://math.meta.stackexchange.com/questions/5020/mathjax-basic-tutorial-and-quick-reference)
+# Tema 3. Transaccións
 ## Concepto de transacción
 Unha **transacción** é unha _unidade lóxica_ de traballo que agrupa _varias operacións_ sobre unha BD. As transaccións son esenciais para evitar problemas de integridade e concurrenciana BD.
 ### Propiedades das transaccións (ACID)

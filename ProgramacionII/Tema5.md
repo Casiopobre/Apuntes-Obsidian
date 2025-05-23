@@ -89,7 +89,7 @@ $$
 O(1) \subset O(\log n) \subset O(\sqrt{n}) \subset O(n) \subset O(n \log n) \subset O(n^2) \subset O(n^3) \subset O(2^n) \subset O(n^n)
 $$
 
-%%[[Exercicios#Exercicios Tema5| VER EXERCICIOS RESOLTOS]]%%
+%%[[ProgramacionII/Exercicios#Exercicios Tema5| VER EXERCICIOS RESOLTOS]]%%
 
 
 

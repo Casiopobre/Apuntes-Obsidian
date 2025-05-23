@@ -3,7 +3,7 @@
 #### Para qué acceder a SQL mediante linguaxes convencionais?
 Principalmente hai **dous motivos**:
 + Para _expresar consultas_ que non se poden expresar en SQL
-+ Para levar a cabo _accións declarativas_ que non se poden levar a cabo en SQL (interacción cos usuarios, interfaz gráfica...)
++ Para levar a cabo _accións non declarativas_ que non se poden levar a cabo en SQL (interacción cos usuarios, interfaz gráfica...)
 
 #### Enfoques sobre o acceso a SQL:
 + **SQL dinámico**: un programa de propósito xeral pode conectarse a un servidor de base de datos empregando unha colección de funcións ou métodos. Permite que os programas constrúan e envíen consultas _en tempo de execución_ (JDBC e ODBC)
@@ -119,13 +119,13 @@ Dado que dende o programa Java _non podemos coñecer a organización concreta da
 
 Cando empregamos `executeQuery()`, o resultado da consulta se obtén nun obxeto `ResultSet`, que ten un método **`getMetaData()`** para obter os metadatos nun obxeto **`ResultSetMetaData`** que, á súa vez, contén _métodos para determinar a información dos metadatos_ (número de columnas dun resultado, nome dunha columna concreta, tipo de datos dunha columna dada...). Esto permite **executar unha consulta sen necesidade de coñecer o esquema** do resultado. 
 > [! Exemplo]
-```java
-ResultSetMetaData rsmd = rs.getMetaData();
-for(int i = 1; i <= rsmd.getColumnCount(); i++) {
-    System.out.println(rsmd.getColumnName(i));
-    System.out.println(rsmd.getColumnTypeName(i));
-}
-```
+> ```java
+>ResultSetMetaData rsmd = rs.getMetaData();
+>for(int i = 1; i <= rsmd.getColumnCount(); i++) {
+ >   System.out.println(rsmd.getColumnName(i));
+ >   System.out.println(rsmd.getColumnTypeName(i));
+>}
+>```
 
 Tamén podemos obter os **metadatos da base de datos** mediante a interfaz **DatabaseMetaData**: a interfaz _Connection_ ten un método `getMetaData()` que _devolve un obxeto do tipo DatabaseMetaData_, que contén varios _métodos para obter os metadatos da BD_ á que está conectada a aplicación.
 
