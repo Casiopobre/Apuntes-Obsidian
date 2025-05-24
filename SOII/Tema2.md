@@ -111,7 +111,7 @@ Na maioría dos sistemas, os recursos se solicitan dun en un, polo que o sistema
 
 <div style="page-break-after: always;"></div>
 
-###### ==Traxectorias dos recursos== ([[Exames#Ex4 exame maio 2022| ver exame 2022]])
+###### ==Traxectorias dos recursos== ([[Maio2022-Resolto#Exercicio 4.| ver exame 2022]])
 Nos diagramas de traxectorias dos recursos, _cada punto no diagrama representa un estado_ conxunto dos dous procesos, e, cun só procesador, as rutas deben ser verticais ou horizontais, nunca diagonais.
 > [!Exemplo]
 > Neste diagrama móstranse as traxectorias de dous procesos competindo por dous recursos.
@@ -136,7 +136,7 @@ Os principais algoritmos pra evitar interbloqueos baséanse no concepto de **est
 > Nese estado, B poderíase completar, pero despois , dado que só quedarían libres 4 recursos e dado que tanto A e C necesitan 5, non hai secuencia que garantice que os procesos se completarán, polo que o sistema non debería ter outorgado a primeira petición de A.
 
 **Observación**: un estado inseguro non é un estado en interbloqueo per se, senon que simplemente é un estado que non _garante_ que todos os procesos terminen.
-##### ==Algoritmo do banqueiro para un só recurso== ([[Exames#Ex4 exame maio 2022| ver exame 2022]])
+##### ==Algoritmo do banqueiro para un só recurso== 
 É un algoritmo proposto por Dijkstra en 1965 que pode evitar interbloqueos. Búscanse **procesos que poidan ser satisfeitos** e se determina se os _recursos liberados_ cando remate poden _satisfacer a outro de maneira recursiva_. 
 
 <div style="page-break-after: always;"></div>
@@ -148,7 +148,7 @@ Os principais algoritmos pra evitar interbloqueos baséanse no concepto de **est
 > (c) é un estado inseguro porque só queda un recurso libre, e todos os procesos precisan máis dun recurso para executarse, polo que se todos os procesos solicitasen o seu número máximo de recursos o banqueiro non podería satisfacer a ningún deles e se produciría un interbloqueo.
 
 Así, o algoritmo do banqueiro **considera cada petición a medida que vai ocorrendo, e analiza se outorgala produce un estado seguro**: en caso afirmativo outorga a petición, e senón a pospón. Para **saber se un estado é seguro**, o banqueiro comproba se ten os _recursos suficientes_ para satisfacer a algun dos seus clientes: en caso afirmativo, _vai facendo a simulación de outorgar as peticións_ a cada un dos seus clientes. Se todos os "préstamos" son satisfactorios, entón a petición inicial conduce a un estado seguro e se pode outorgar.
-##### ==Algoritmo do banqueiro para varios recursos==
+##### ==Algoritmo do banqueiro para varios recursos== ([[Maio2022-Resolto#Exercicio 4.| ver exame 2022]])
 Para aplicar o algoritmo do banqueiro para varios recursos, necesitamos unha matriz de **recursos asignados**, outra de **recursos necesitados**, e tres vectores: de **recuros existentes** (E), de **recursos posuídos** (P) e de **recursos dispoñibles** (A).
 ![[algoritmoBanqueiroVariosRecursos.png| center | 400]]
 É evidente que $A_{i}=E_{i}-P_{i}$, é decir, que os recursos dispoñibles son os existentes menos os posuídos.

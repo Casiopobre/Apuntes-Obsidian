@@ -151,7 +151,7 @@ salir_region:
 	MOVE CANDADO,#0 ;Pon o candado a 0
 	RET ;Volve ao chamador
 ```
-
+[[Maio2022-Resolto#Exercicio 3. | _Ver exame 2022_]]
 <div style="page-break-after: always;"></div>
 
 ##### Instrucción alternativa: XCHG
@@ -283,6 +283,7 @@ _Chamadas de Pthreads relacionadas con mutexes_:
 As variables de condición son un _mecanismo de sincronización_ que serve para **bloquear threads ata que se cumpla unha condición** determinada, polo que están _asociadas a mutexes_. Permiten que a espera e bloqueo se realicen de forma _atómica_.
 _Chamadas a Pthreads relacionadas con variables de condición_:
 ![[Pasted image 20250501153532.png | center | 450]]
+[[Maio2022-Resolto#Exercicio 2. | _Ver exame 2022 sobre pthread_cond_wait()_]]
 
 Para a **sincronización de fíos**, empréganse tanto _mutexes_ como _variables de condición_ en conxunto, da seguinte forma: un _fío pecha un mutex_ e despois _espera a unha variable de condición_ cando non poida obter o que necesita.
 ![[sincronizacionFios.png | center | 400]]

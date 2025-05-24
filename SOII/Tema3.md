@@ -38,7 +38,7 @@ Así, o RMS **asigna a cada proceso unha prioridade fixa**, igual á frecuencia 
 > Primeiro escóllese o proceso con maior prioridade (A), e es executa ata que se completa. Despois execútanse B e C. En conxunto, tardaron 30ms en executarse os tres (tempo de frecuencia de A), polo que A volve a executarse nese momento. Seguen rotando así ata que o sistema se queda inactivo aos 70ms, xa que ningún proceso está listo. Aos 80ms, como B está listo, execútae, pero en t=90, como A está listo e ten maior prioridade, se substitúe por B e se executa ata rematar (t=100). Despois o sistema continúa con B (maior prioridade) e, por último, executa C.
 
 ### Programación do menor tempo de resposta primeiro (EDF)
-O EDF é un algoritmo _dinámico_ que non require nin que os procesos sexan periódicos (ao igual que o RMS), nin que o tempo de execución en cada ráfaga sexa o mesmo. 
+O EDF é un algoritmo _dinámico_ que non require nin que os procesos sexan periódicos nin que o tempo de execución en cada ráfaga sexa o mesmo. 
 Cada vez que un **proceso ncesita tempo de CPU**, anuncia a súa presencia e seu **tempo de resposta**. O programador ten unha _lista de procesos executables ordenados polo seu tempo de resposta_. Así, o algoritmo _executa o primer proceso da lista_ (o que ten o tempo de resposta máis cercano), e cada vez que un novo proceso está listo, o sistema comproba se ocorre o seu _tempo de resposta antes que o do proceso que se está executando_, e, se é así, o novo proceso reemplaza ao actual.
 > [!Exemplo]
 > Supoñendo o exemplo de antes:
@@ -55,7 +55,7 @@ Aínda así, é importante denotar que **RMS e EDF non sempre dan os mesmos resu
 
 **Por qué fallou RMS?** Porque ese algoritmo só funciona cando se compre que:
 $$
-\sum_{i=1}^{n} \frac{C_i}{T_i} \leq n(2^{1/m}-1) \equiv n=3,   usoCPU \leq 0.780
+\sum_{i=1}^{n} \frac{C_i}{T_i} \leq n(2^{1/n}-1) \equiv n=3,   usoCPU \leq 0.780
 $$
 Dado que no exemplo anterior o uso de CPU era de 0.975, _RMS tiña moitas probabilidades de fallar_, mentres que pola contra, **EDF sempre funciona para calquera conxunto programable de procesos**.
 
