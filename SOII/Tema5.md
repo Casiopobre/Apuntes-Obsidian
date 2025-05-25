@@ -1,7 +1,7 @@
 # Tema 5. Shell
 [Bash Scripting Cheatsheet](https://devhints.io/bash)
 O **shell** _traduce comandos en ordes_ ao SO.
-O **bash** é un shell que ten todas as características de _sh_ (que era o shell que implementaba as primeiras versións de linux) e ademáis inclúe algunhas características avanzadas de _C_.ç
+O **bash** é un shell que ten todas as características de _sh_ (que era o shell que implementaba as primeiras versións de linux) e ademáis inclúe algunhas características avanzadas de _C_.
 
 ## Funcionamento do shell
 Hai **comandos internos** (`cd`, `alias`, `echo`, ...), que se executan no _mesmo proceso_, e **comandos externos** (`cp`, `cat`, `mkdir`, ...), que inician un _novo proceso_ e cambian a súa imaxe pola do arquivo executable.
