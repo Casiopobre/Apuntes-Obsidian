@@ -1,7 +1,7 @@
 ##### Exercicio 1.
 Cuatro procesos se ejecutan sin que se garantice exclusión mutua de los accesos. Todos los procesos comparten una variable `sum` y todos ejecutan un bucle de 10 iteraciones en el que hacen `sum++`. ¿Cuál es el resultado final del sum?
 ###### Solución:
-Dado que non hai exclusión mútua, como sum non é unha instrucción atómica, o resultado final de sum será un valor entre 1 (no peor dos casos) e 40, en caso de que por sorte ningún proceso pise a outro.
+Dado que non hai exclusión mútua, como sum non é unha instrucción atómica, o resultado final de sum será un valor entre 2 (no peor dos casos) e 40, en caso de que por sorte ningún proceso pise a outro.
 
 
 ---
@@ -18,12 +18,14 @@ int pthread_cond_wait(pthread_cond_t *cond, pthread_mutex_t *mutex);
 ##### Exercicio 3.
 Determina si el siguiente código tiene algún error y corrígelo. Después explica cómo evitarías carreras críticas en el segundo código.
 ```asm
-Entrar: TSL R1, $1000 
-		CMP R1, #0 
-		JNE entrar 
-		RET 
-Salir: MOVE $1000, #0 
-		RET
+Entrar: 
+	TSL R1, $1000 
+	CMP R1, #0 
+	JNE entrar 
+	RET 
+Salir: 
+	MOVE $1000, #0 
+	RET
 ```
 
 ```asm
@@ -35,7 +37,7 @@ SW R5, $3000
 ...
 ```
 ###### Solución:
-Supoñendo que na dirección $100 está o candado, o código é correcto, xa que copia o candado a R1, comproba se o candado era 0 e de ser así, volve ao proceden¡mento chamador (en caso contrario, volve a comprobalo). Despois en salir, pon o candado a 0 e volve ao procedemento chamador.
+Supoñendo que na dirección $100 está o candado, o código é correcto, xa que copia o candado a R1, comproba se o candado era 0 e de ser así, volve ao procedemento chamador (en caso contrario, volve a comprobalo). Despois en salir, pon o candado a 0 e volve ao procedemento chamador.
 
 Para evitar carreiras críticas no segundo código, simplemente debemos chamar a Entrar antes de entrar á rexión crítica e a Salir, para salir dela:
 ```asm

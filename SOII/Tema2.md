@@ -32,7 +32,7 @@ Se os procesos necesitan _dous ou máis recursos_, estes se adquiren de **forma 
 Un interbloqueo de recursos ocorre cando **cada proceso espera pola liberación de algún recurso** que está sendo _empregado por outro proceso do conxunto_, polo que ningún dos procesos se pode executar, ningún pode liberar recursos e ningún pode ser despertado. 
 ### Condicións para os interbloqueos de recursos
 Para que ocorra un interbloqueo deben aplicarse todas as condicións seguintes:
-1. **Condición de exclusión mutua** $\rightarrow$ cada proceso _se asigna a un só proceso ou está dispoñible_.
+1. **Condición de exclusión mutua** $\rightarrow$ cada recurso _se asigna a un só proceso ou está dispoñible_.
 2. **Condición de contención e espera** $\rightarrow$ os procesos que conteñen recursos outorgados previamente, poden _solicitar novos recursos_.
 3. **Condición non apropiativa** $\rightarrow$ _os recursos outorgados_ previamente _non se lle poden quitar a un proceso pola forza_, senon que _deben ser liberados_ de explicitamente polo proceso que os contén.
 4. **Condición de espera circular** $\rightarrow$ debe haber unha _cadea circular_ de dous ou máis _procesos_, cada un _esperando por un recurso contido polo seguinte_ proceso da cadea.
@@ -163,7 +163,8 @@ Para aplicar o algoritmo do banqueiro para varios recursos, necesitamos unha mat
 #### Prevención de interbloqueos
 Para previr interbloqueos temos que asegurar que, polo menos, **nunca se cumpra unha das condicións** para estes ([[SOII/Tema2#Condicións para os interbloqueos de recursos| ver arriba]]).
 ##### Atacar a condición de exclusión mutua
-Se **ningún recurso se asignara de maneira exclusiva a un só proceso**, nunca teríamos interbloqueos; pero esto non é posible ca maioría de recursos xa que sería un caos. Por exemplo, no caso dunha **impresora**, sería inviable permitir que tódolos procesos escribisen nela á vez, polo que neste modelo, o _único proceso que solicita realmente a impresora física_ é o **demonio de impresión**; e, como este nunca solicita ningún outro recurso, o _interbloqueo para a impresora queda eliminado_. Unha idea que se aplica con frecuencia é a de **evitar asignar un recurso cando non sexa estrictamente necesario**, e tratar de **asegurar que a menor cantidade posible de procesos reclamen ese recurso**.
+Se **ningún recurso se asignara de maneira exclusiva a un só proceso**, nunca teríamos interbloqueos; pero esto non é posible ca maioría de recursos xa que sería un caos. Por exemplo, no caso dunha **impresora**, sería inviable permitir que tódolos procesos escribisen nela á vez, polo que neste modelo, o _único proceso que solicita realmente a impresora física_ é o **demonio de impresión**; e, como este nunca solicita ningún outro recurso, o _interbloqueo para a impresora queda eliminado_. 
+Unha idea que se aplica con frecuencia é a de **evitar asignar un recurso cando non sexa estrictamente necesario**, e tratar de **asegurar que a menor cantidade posible de procesos reclamen ese recurso**.
 ##### Atacar a condición de contención e espera
 Trátase de **evitar que os procesos que conteñen recursos esperen por máis recursos**, polo que se debería requerir que tódolos procesos _soliciten todos os seus recursos antes de empezar a execución_. Non obstante, o **problema** deste método é que moitos procesos _non saben cantos recursos necesitarán ata que empezen a executarse_ (se o souberan, poderíase empregar o algoritmo do banqueiro) . Ademáis, así os recursos _non se empregarían de maneira óptima_.
 Unha forma distinta de atacar a condición de contención e espera é _requerir que un proceso que solicita un recurso libere termporalmete os recursos que contén_ nun momento dado, para despois tratar de obter todo o que necesite á vez.

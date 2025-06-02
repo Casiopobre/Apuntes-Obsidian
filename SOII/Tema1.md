@@ -89,7 +89,7 @@ Consiste en ter unha **variable enteira `turno` que leva a conta de a qué proce
 > ```c
 > while (TRUE) {                      while (TRUE) {   
 > 	while (turno !=0) ;                 while (turno !=1) ;
-> 	region critica();                   region critica();
+> 	region_critica();                   region_critica();
 > 	turno=1;                            turno=0; 
 > 	region_no_critica();                region_no_critica();
 > }                                   }
@@ -254,7 +254,7 @@ void consumidor(void) {
 ### Mutexes
 Básicamente son como unha _versión simplificada dos semáforos_ (sen a habilidade de contar), é decir, unha variable que toma valores binarios (0 ou 1). Aos mutexes dáselles ben únicamente **administrar a exclusión mutua**, e son eficientes e sinxelos de implementar. Están rexidos por **dúas operacións atómicas**:
 + **`lock`**: se o mutex está aberto (_mutex = 0_) $\rightarrow$ a rexión crítica está dispoñible $\rightarrow$ a chamada ten éxito (en caso contrario, o fío bloquéase ata que a rexión crítica estea dispoñible)
-+ **`unlock`**: pon o _mutex a 1_ $\rightarrow$ desbloquea a rexión crítica 
++ **`unlock`**: pon o _mutex a 0_ $\rightarrow$ desbloquea a rexión crítica 
 
 As operacións `lock` e `unlock` pódense implementar facilmente _con instruccións TSL ou XCHG_:
 ```asm

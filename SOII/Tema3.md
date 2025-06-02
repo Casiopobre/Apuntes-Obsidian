@@ -30,7 +30,7 @@ O algoritmo de programación de tempo real _estático_ para los procesos periód
 4. _Ningún proceso aperiódico ten tempo de resposta_.
 5. A _preferencia dos procesos_ ocorre de forma _instantánea_ e _sen sobrecarga_.
 
-Así, o RMS **asigna a cada proceso unha prioridade fixa**, igual á frecuencia de ocorrencia do seu evento de activación, polo que _as prioridades son linais coa frecuencia_ (por exemplo, un proceso que se execute cada 30 ms, execútase 33 veces cada segundo (1000ms/30ms), polo que obtén prioridade 33). Despois, en tempo de execución, o programador sempre **executa o proceso que estea listo e que teña a maior prioridade**.
+Así, o RMS **asigna a cada proceso unha prioridade fixa**, igual á frecuencia de ocorrencia do seu evento de activación, polo que _as prioridades son linais coa frecuencia_ (por exemplo, un proceso que se execute cada 30 ms, execútase 33 veces cada segundo (1000ms/30ms), polo que obtén prioridade 33). Despois, en tempo de execución, o planificador sempre **executa o proceso que estea listo e que teña a maior prioridade**.
 
 > [!Exemplo]
 > Supoñendo procesos A, B e C con prioridades de 33, 25 e 20, respec., teñen a seguinte programación:
